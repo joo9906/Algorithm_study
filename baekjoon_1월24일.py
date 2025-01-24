@@ -9,6 +9,7 @@ black_list = [
     'Romaguera-Crona',
 ]
 
+
 censored_user_list = {}
 
 def create_user(information):
