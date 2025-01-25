@@ -1,8 +1,6 @@
-a = 0
-b = 1
-c = 1
+a = input()
+b = input()
+c = input()
 
-print((a and b) == True)
-print((a or b) == True)
-print((b and c) == True)
-print(a!=True)
+print(f'{a}{b}')
+print(c*10)
