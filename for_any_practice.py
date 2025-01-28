@@ -1,59 +1,33 @@
-# a = input()
-# b = 'ads'
-# count = 0
-# print(a)
-# compare = ['c=', 'c-', 'dz=', 'd-', 'lj', 'nj', 's=', 'z=']
+data = [
+    {
+        'name': 'galxy flip',
+        'company': 'samsung',
+        'is_collapsible': True,
+    },
+    {
+        'name': 'ipad',
+        'is_collapsible': False
+    },
+    {
+        'name': 'galxy fold',
+        'company': 'samsung',
+        'is_collapsible': True
+    },
+    {
+        'name': 'galxy note',
+        'company': 'samsung',
+        'is_collapsible': False
+    },
+    {
+        'name': 'optimus',
+        'is_collapsible': False
+    },
+]
 
-# while True:
-#     if a.find('nj') == True:
-#         count +=1
-#         a1 = a.replace('nj', '')
-#     elif a.find('c=') == True:
-#         count +=1
-#         a2 = a1.replace('c=', '')
-#     elif a.find('c-') == True:
-#         count +=1
-#         a3 = a2.replace('c-', '')
-#     elif a.find('dz=') == True:
-#         count +=1
-#         a4 = a3.replace('dz=', '')
-#     elif a.find('d-') == True:
-#         count +=1
-#         a5 = a4.replace('d-', '')
-#     elif a.find('lj') == True:
-#         count +=1
-#         a6 = a5.replace('lj', '')
-#     elif a.find('s=') == True:
-#         count +=1
-#         a7 = a6.replace('s=', '')
-#     elif a.find('z=') == True:
-#         count +=1
-#         a8 = a7.replace('z=', '')
-#         break
-# print(a8)
+key_list = ['name', 'company', 'is_collapsible']
 
-# # last = len(list(a))
-# # count += last
-# # print(count)
-
-# a = input()
-# count = 0
-# a_list = ()
-# compare = ['c=', 'c-', 'dz=', 'd-', 'lj', 'nj', 's=', 'z=']
-
-# for i in compare:
-#     if i in a:
-#         count+=1
-#         a_list.append(i)
-
-# b = list(a)
-# total = count + len(b)
-# print(total)
-
-croatia = ['c=', 'c-', 'dz=', 'd-', 'lj', 'nj', 's=', 'z=']
-word = input()
-
-for i in croatia :
-    word = word.replace(i, '*')
-    print(word)# input 변수와 동일한 이름의 변수
-print(len(word))
+# 아래에 코드를 작성하시오.
+for i in data:
+    i.setdefault('company', 'unknown')
+    print(f'name은/는 {i.get('name')}입니다.\ncompany은/는 {i.get('company')}입니다.\nis_collapsible은/는 {i.get('is_collapsible')}입니다.')
+    print('')
