@@ -114,24 +114,40 @@
 
 #-------------------------------------------------------
 # #2566
-first = []
-second = []
+# first = []
+# second = []
 
-for i in range(9): #first를 2차열 배열로 제작
-    a = list(map(int,input().split()))
-    first.append(a)
+# for i in range(9): #first를 2차열 배열로 제작
+#     a = list(map(int,input().split()))
+#     first.append(a)
     
-for i in first:
-    a = max(i)
-    second.append(a)
+# for i in first:
+#     a = max(i)
+#     second.append(a)
 
-m = max(second)
-print(m)
+# m = max(second)
+# print(m)
 
-for i in range(9):
-    for k in range(9):
-        if first[i][k] == m:
-            row_a = i+1
-            col_a = k+1
-            print(row_a, col_a)
-            break
+# for i in range(9):
+#     for k in range(9):
+#         if first[i][k] == m:
+#             row_a = i+1
+#             col_a = k+1
+#             print(row_a, col_a)
+#             break
+#--------------------------------------------------------
+#  #2563  -- 100*100에 0을 부여하고 값을 1로 바꿔서 찾음
+# a = int(input())
+# paper = [[0]*100 for i in range(100)]
+
+# for i in range(a):
+#     x, y = map(int, input().split())
+#     for b in range(y,y+10):
+#         for c in range(x,x+10):
+#             paper[b][c] = 1
+            
+# num = 0
+# for j in range(100):
+#     num += paper[j].count(1)
+
+# print(num)
