@@ -1,33 +1,14 @@
-data = [
-    {
-        'name': 'galxy flip',
-        'company': 'samsung',
-        'is_collapsible': True,
-    },
-    {
-        'name': 'ipad',
-        'is_collapsible': False
-    },
-    {
-        'name': 'galxy fold',
-        'company': 'samsung',
-        'is_collapsible': True
-    },
-    {
-        'name': 'galxy note',
-        'company': 'samsung',
-        'is_collapsible': False
-    },
-    {
-        'name': 'optimus',
-        'is_collapsible': False
-    },
-]
+a = int(input())
+paper = [[0]*100 for i in range(100)]
 
-key_list = ['name', 'company', 'is_collapsible']
+for i in range(a):
+    x, y = map(int, input().split())
+    for b in range(y,y+10):
+        for c in range(x,x+10):
+            paper[b][c] = 1
+            
+num = 0
+for j in range(100):
+    num += paper[j].count(1)
 
-# 아래에 코드를 작성하시오.
-for i in data:
-    i.setdefault('company', 'unknown')
-    print(f'name은/는 {i.get('name')}입니다.\ncompany은/는 {i.get('company')}입니다.\nis_collapsible은/는 {i.get('is_collapsible')}입니다.')
-    print('')
+print(num)
