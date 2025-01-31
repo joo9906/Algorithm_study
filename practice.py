@@ -1,2 +1,5 @@
-print('이거 제출 좀 하고싶은디디')
-드디어 가능인가?
+import requests
+
+rul = 'https://fakestoreapi.com/carts'
+data = requests.get(rul).json()
+print(data)

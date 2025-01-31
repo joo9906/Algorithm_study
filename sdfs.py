@@ -1,10 +1,12 @@
-# 아래 함수를 수정하시오.
-def find_min_max(a):
-    min_val = min(a)
-    max_val = max(a)
-    res = (min_val, max_val)
-    return res
+a = input().lower()
+word = list(set(a))
+how = []
 
+for i in word:
+    count = a.count(i)
+    how.append(count)
 
-result = find_min_max([3, 1, 7, 2, 5])
-print(result)  # (1, 7)
+if how.count(max(how)) >= 2:
+    print("?")
+else:
+    print(word[(how.index(max(how)))].upper())
