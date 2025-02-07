@@ -1,14 +1,19 @@
-a = int(input())
-paper = [[0]*100 for i in range(100)]
+a = []
+b = 0
 
-for i in range(a):
-    x, y = map(int, input().split())
-    for b in range(y,y+10):
-        for c in range(x,x+10):
-            paper[b][c] = 1
-            
-num = 0
-for j in range(100):
-    num += paper[j].count(1)
+for i in range(5):
+    word = input().strip()
+    a.append(word)
 
-print(num)
+wor = input().strip()
+senten = input().strip()
+
+
+
+for i in a:
+    if wor in i or senten in i:
+        print(i)
+        b+=1
+
+if b==0:
+    print('none')
