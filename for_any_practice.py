@@ -1,14 +1,13 @@
-a = int(input())
-paper = [[0]*100 for i in range(100)]
+di = [0, 1, 0, -1]
+dj = [1, 0, -1, 0]
 
-for i in range(a):
-    x, y = map(int, input().split())
-    for b in range(y,y+10):
-        for c in range(x,x+10):
-            paper[b][c] = 1
-            
-num = 0
-for j in range(100):
-    num += paper[j].count(1)
+n = 2
+m = 3
 
-print(num)
+for i in range(n):
+    for j in range(m):
+        for dir in range(4):
+            ni = i +di[dir]
+            nj = j +dj[dir]
+            if 0<= ni < n and 0<=nj<=m:
+                print(ni, nj)
