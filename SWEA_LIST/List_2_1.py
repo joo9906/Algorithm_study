@@ -1,4 +1,4 @@
-# #리스트 2-1의 스도쿠 문제
+# #리스트 2-1 스도쿠 문제
 # # 얕은 복사를 이용해 중복되는 값이 있다면 사라지지 않아 0을 반환하게끔 함
 # def sudoku(testcase):
 #     answer = 1
@@ -39,7 +39,7 @@
 #     print(f'#{i} {sudoku(testcase)}')
 # 
 #----------------------------------------------------------------------------------
-# 리스트 2-1의 낱말 문제
+# 리스트 2-1 낱말 문제
 # T = int(input())
 
 # def puzzle(N, K, arr):
@@ -79,3 +79,67 @@
 #     arr = [list(map(int, input().split())) for _ in range(N)]
     
 #     print(f'#{i} {puzzle(N, K, arr)}')
+# ------------------------------------------------------------------------
+# List 2 - 1 Sum
+# 
+# def find_max(arr):
+#     compare_list = []
+
+#     for i in range(100):
+#         compare_list.append(sum(arr[i]))
+
+#     for i in range(100):
+#         col_sum = 0
+#         for j in range(100):
+#             col_sum += arr[j][i]
+#         compare_list.append(col_sum)
+
+#     cross_sum = 0
+#     for x in range(100):
+#         cross_sum += arr[x][x]
+#     compare_list.append(cross_sum)
+
+#     rcross_sum = 0
+#     for x in range(100):
+#         rcross_sum += arr[x][99-x]
+#     compare_list.append(rcross_sum)
+
+#     return max(compare_list)
+
+# for i in range(10):
+#     T = int(input())
+#     arr = []
+#     for k in range(100):
+#         num = list(map(int, input().split()))
+#         arr.append(num)
+#     print(f'#{T} {find_max(arr)}')
+--------------------------------------------------------------------------------
+# 리스트 2 - 1 파리퇴치
+
+# T = int(input())
+
+# def CatchFly(N, M, arr):
+#     catch_fly = []
+#     for i in range(M):
+#         for j in range(M):
+#             catch_fly.append([i, j])
+
+#     num_catch = []
+
+#     for x in range(N-M+1):
+#         for y in range(N-M+1):
+#             sum_fly = 0
+#             for i, j in catch_fly:
+#                 nx = x + i
+#                 ny = y + j
+#                 if 0 <= nx < N and 0 <= ny < N:
+#                     sum_fly += arr[nx][ny]
+#             num_catch.append(sum_fly)
+#     result = max(num_catch)
+
+#     return result
+
+# for i in range(1, T+1):
+#     N, M = map(int, input().split())
+#     arr = [list(map(int, input().split())) for _ in range(N)]
+#     print(f'#{i} {CatchFly(N, M, arr)}')
