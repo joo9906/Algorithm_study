@@ -1,19 +1,25 @@
-n, m = map(int, input().split())
-arr = [0] * 1000001
 
-for _ in range(n):
-    x, y = map(int, input().split())
-    arr[y-1] = x
+def dnapw():
+    S, P = map(int, input().split())
+    DNA = input()
+    DNA_list =[]
+    DNA_list.extend(DNA)
+    A, C, G, T = map(int, input().split())
+    count_dna = {'A':0, 'C' : 0, 'G' : 0, 'T' : 0}
+    cnt = 0
 
-def polar(arr, m):
-    window = sum(arr[:m*2+1])
-    max_ice = window
+    for i in range(P):
+        count_dna[DNA_list[i]] += 1
 
-    for i in range(1, 100000-m*2) :
-        window = window - arr[i-1] + arr[i+m*2]
-        if max_ice < window:
-            max_ice = window
+    if count_dna['A'] >= A and count_dna['C'] >= C and count_dna['G'] >= G and count_dna['T'] >= T:
+            cnt += 1
 
-    return max_ice
+    for j in range(P, S):
+        count_dna[DNA_list[j]] += 1
+        count_dna[DNA_list[j-P]] -= 1
+        if count_dna['A'] >= A and count_dna['C'] >= C and count_dna['G'] >= G and count_dna['T'] >= T:
+            cnt += 1
 
-print(polar(arr, m))
+    return cnt
+
+print(dnapw())
