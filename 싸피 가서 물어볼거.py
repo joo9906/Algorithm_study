@@ -9,8 +9,8 @@ def polar(arr, m):
     window = sum(arr[:m*2+1])
     max_ice = window
 
-    for i in range(1, 100000-m*2) :
-        window = window - arr[i-1] + arr[i+m*2]
+    for i in range(m*2+1, 1000001) :
+        window = window - arr[i-(m*2+1)] + arr[i]
         if max_ice < window:
             max_ice = window
 
