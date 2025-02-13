@@ -1,59 +1,32 @@
 T = int(input())
-
-def stone(n, m, arrs, cnt):
-    if cnt == 0 :
-        return print(*arrs)
-
-    i, j = map(int, input().split())
-
-    a = arrs[0:i-1]
-    a = a[::-1]
-    b = arrs[i:n]
-    comp = min(len(a), len(b))
-
-    if comp >= j:
-        for k in range(j):
-            if a[k] == b[k] == 1:
-                a[k] = b[k] = 0
-
-            elif a[k] == b[k] == 0:
-                a[k] = b[k] = 1
-
-            else:
-                continue
-
-    elif comp < j:
-        for k in range(comp):
-            if a[k] == b[k] == 1:
-                a[k] = b[k] = 0
-
-            elif a[k] == b[k] == 0:
-                a[k] = b[k] = 1
-
-            else:
-                continue
-
-    a = list(reversed(a))
-    result = []
-    result.extend(a)
-    # result.extend(arrs[i-1]) 처음에 시도한 방법법
-    if 1 <= i <= n:
-        result.extend(arrs[i - 1:i])
-    result.extend(b)
-
-    arrs = result
-
-    cnt -= 1
-
-
-    return stone(n, m, arrs, cnt)
-
-
-
-for i in range(1, T+1):
+ 
+def bomb():
     n, m = map(int, input().split())
-    arr = list(map(int, input().split()))
-    print(f'#{i}', end = ' ')
-    stone(n, m, arr, m)
+    k = int(input())
+    arr = [list(input()) for _ in range(n)]
+    delta = [[0,1], [1, 0], [0, -1], [-1, 0]]
+ 
+    for i in range(n):
+        for j in range(m):
+            for x, y in delta:
+                nx = i + x
+                ny = j + y
+                if 0 <= nx < n and 0 <= ny < m and arr[i][j] == '@':
+                    for _ in range(k):
+                        if arr[nx][ny] == '_':
+                            arr[nx][ny] = '%'
+                            nx += x
+                            ny += y
+                        else:
+                            break
+            if arr[i][j] == '@':
+                arr[i][j] = '%'
+ 
+    for k in range(n):
+        print(''.join(arr[k]))
+ 
+for p in range(1, T+1):
+    print(f'#{p}')
+    bomb()
 
-
+폭탄테러 - 테스트 5개 다 맞았다면서 런타임에러 떴음

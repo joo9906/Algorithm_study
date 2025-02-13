@@ -198,7 +198,7 @@ def balloon():
             for x, y in delta: #델타 사용용
                 nx = i + x
                 ny = j + y
-                while 0 <= nx < n and 0 <= ny < n: #이 조건은 그냥 외우시는게 좋아요요
+                while 0 <= nx < n and 0 <= ny < n: #이 조건은 그냥 외우시는게 좋아요
                     score += arr[nx][ny]
                     nx += x
                     ny += y
