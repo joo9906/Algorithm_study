@@ -6,20 +6,31 @@ def stone():
     result = []
     for _ in range(m):
         i, j = map(int, input().split())
-        a = arr[0:i-1]
-        a = a.reverse()
-        b = arr[i:n]
-        for k in range(j-1):
-            if a[k] == b[k] == 1:
-                a[k] = b[k] = 0
+        if result == [] :
+            a = arr[0:i-1]
+            a = a[::-1]
+            b = arr[i:n]
+        elif result == True :
+            a = result[0:i-1]
+            a = a[::-1]
+            b = result[i:n]
 
-            elif a[k] == b[k] == 0:
-                a[k] = b[k] = 1
+        try :
+            for k in range(j-1):
+                if a[k] == b[k] == 1:
+                    a[k] = b[k] = 0
 
-            else :
-                a[k], b[k] = b[k], a[k]
-    result.extend(a)
-    result.extend(b)
+                elif a[k] == b[k] == 0:
+                    a[k] = b[k] = 1
+
+                else :
+                    a[k], b[k] = b[k], a[k]
+        except IndexError:
+            break
+
+        result.extend(list(reversed(a)))
+        result.append(arr[i-1])
+        result.extend(b)
 
     return result
 
