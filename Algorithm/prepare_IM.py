@@ -67,3 +67,105 @@ def bomb():
 for p in range(1, T+1):
     print(f'#{p}')
     bomb()
+
+# ----------------------------------------------------------------------------------
+# 채점방식
+T = int(input())
+
+def test(student, test_num, correct, compare):
+    best = 0
+    worst = float('inf')
+    for i in range(student):
+        seq = 0
+        score = 0
+        for j in range(test_num):
+            if correct[j] == compare[i][j]:
+                seq += 1
+                score += seq
+            else:
+                seq = 0
+
+        if score > best:
+            best = score
+        if score < worst:
+            worst = score
+
+    return best-worst
+
+for tc in range(1, T+1):
+    student, test_num = map(int, input().split())
+    correct = list(map(int, input().split()))
+    compare = [list(map(int, input().split())) for _ in range(student)]
+    print(f'#{tc} {test(student, test_num, correct, compare)}')
+
+# -----------------------------------------------------------------------------------
+# 바이러스 죽이기
+T = int(input())
+
+def charb():
+    n, p = map(int, input().split())
+    arr = [list(map(int, input().split())) for _ in range(n)]
+    delta = [[0, 1], [1, 0], [0, -1], [-1, 0]]
+    best = []
+
+    for i in range(n):
+        for j in range(n):
+            score = 0
+            score += arr[i][j]
+            for x, y in delta:
+                nx = x + i
+                ny = y + j
+                for k in range(p):
+                    if 0 <= nx < n and 0 <= ny < n:
+                        score += arr[nx][ny]
+                        nx += x
+                        ny += y
+            best.append(score)
+    return max(best)
+
+for k in range(1,T+1):
+    print(f'#{k} {charb()}')
+
+# ----------------------------------------------------------------------------------------
+# 스마트폰
+from collections import deque
+T = int(input())
+
+def captcha():
+    test_case = [[0] * 1001 for _ in range(1001)]
+    a = list(map(int, input().split()))
+    b = list(map(int, input().split()))
+
+    for i in range(a[0], a[2]+1):
+        for j in range(a[1], a[3]+1):
+            test_case[i][j] += 1
+
+    for i in range(b[0], b[2]+1):
+        for j in range(b[1], b[3]+1):
+            test_case[i][j] += 1
+
+    result = 0
+    gyup = []
+
+    for i in range(1000):
+        for j in range(1000):
+            if test_case[i][j] == 2:
+                result += 1
+                gyup.append([i,j])
+
+    if result == 0:
+        return 4
+
+    if result == 1:
+        return 3
+
+    xs = [x for x, y in gyup]
+    ys = [y for x, y in gyup]
+
+    if len(set(xs)) == 1 or len(set(ys)) == 1:
+        return 2
+
+    return 1
+
+for i in range(1, T+1):
+    print(f'#{i} {captcha()}')

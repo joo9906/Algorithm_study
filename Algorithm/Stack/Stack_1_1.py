@@ -1,24 +1,47 @@
-# 방문 순서 출력하기
+# 방문 순서 출력하기 - DFS를 재귀함수로 구현
 T = int(input())
 
 def recur(arr, v, visit):
-    visit[v] = 4 # 방문 여부를 알기 위해 가장 첫 방문은 했다(4라는 값으로) 설정
+    visit[v] = 4 # 방문 여부를 알기 위해 v좌표에에 방문은 했다(4라는 값으로) 바꿔줌
     print(v, end=' ') # v의 값을 출력
 
     for i in range(len(arr)): # 인접행렬의 줄 수 만큼 반복(첫 줄에서 제일 먼저 만나는 애부터 시작)
         if arr[v][i] == 1 and visit[i] == 3: # 첫번째 노드의 자식 노드들을 순회하면서 (v, i)에 간선이 있고, 방문도 하지 않았다(==3)면 해당 i값을 재귀하며 탐색
             recur(arr, i, visit)
 
-
-
 for i in range(T):
     N = int(input())
     arr = [list(map(int, input().split())) for _ in range(N)]
-    v = 0
     visit = [3] * N
     print(f'#{i+1}', end = ' ')
-    recur(arr, v, visit)
+    recur(arr, 0, visit)
     print()
+
+# 재귀함수 사용하지 않은 버전
+
+T = int(input())
+
+def DFS(n, arr, stack):
+    visited = [False] * n
+    result = []
+
+    while stack : #stack이 비어있지 않으면
+        v = stack.pop() #stack의 가장 우측 요소를 뽑아서 v값에 배정
+
+        if visited[v] == False: # visited를 확인해서 v에 방문하지 않았으면 True로 바꿈(방문했다)
+            visited[v] = True
+            result.append(v)
+
+            for i in range(n-1, -1, -1): #v번째 줄을 돌며 어떤 노드로 들어가야 할 지 탐색
+                if arr[v][i] == 1 and visited[i] == False: # 들어가야 할 노드라고 확인이 되면
+                    stack.append(i) #stack에 i를 넣음
+    return result
+
+for i in range(1,T+1):
+    n = int(input())
+    arr = [list(map(int, input().split())) for _ in range(n)]
+    stack = [0]
+    print(f'#{i}', *DFS(n, arr, stack))
 
 # --------------------------------------------------------------------
 # 괄호 짝짓기
@@ -106,3 +129,23 @@ for e in range(10):
      
     result = find_path(arr)
     print(f'#{e+1} {result}')
+
+# --------------------------------------------------------------------------------
+
+# 비밀번호
+def password(n, arr):
+    stack = []
+    for i in arr:
+        if stack and stack[-1] == i:
+            stack.pop()
+        else:
+            stack.append(i)
+    result = ''.join(map(str, stack))
+    return result
+
+for i in range(10):
+    n, arr = map(str, input().split())
+    arr = list(map(int, arr))
+    print(f'#{i+1} {password(int(n), arr)}')
+
+# ----------------------------------------------------------------------------------
