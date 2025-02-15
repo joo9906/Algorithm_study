@@ -281,3 +281,38 @@ for i in range(1, T+1):
     arr = [list(map(int, input().split())) for _ in range(N)]
       
     print(f'#{i} {puzzle(N, K, arr)}')
+    
+# --------------------------------------------------------------------------------------
+# 숫자 돌리기
+T = int(input())
+
+def num():
+    n = int(input())
+    base = [list(map(int, input().split())) for _ in range(n)]
+    after_1 = [[] for _ in range(n)]
+    after_2 = [[] for _ in range(n)]
+    after_3 = [[] for _ in range(n)]
+    
+    
+    for i in range(n-1, -1, -1):
+        for j in range(n):
+            after_1[j].append(base[i][j])
+            
+    for i in range(n-1, -1, -1):
+        for j in range(n):
+            after_2[j].append(after_1[i][j])
+            
+    for i in range(n-1, -1, -1):
+        for j in range(n):
+            after_3[j].append(after_2[i][j])
+    
+    for k in range(n):
+        print(''.join(str(num) for num in after_1[k]), end=' ')
+        print(''.join(str(num) for num in after_2[k]), end=' ')
+        print(''.join(str(num) for num in after_3[k]), end=' ')
+        print()
+
+for q in range(1, T+1):
+    print(f'#{q}')
+    num()
+
