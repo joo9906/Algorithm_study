@@ -31,7 +31,7 @@ def monster():
                                     arr[nx][ny] = 1 # 광선이 닿는 범위로 바꿈
                                     nx += x
                                     ny += y
-
+    print(arr)
     for i in range(10): # 전체 배열에서 사람이 살 수 있는 0만 탐색
         for j in range(10):
             if arr[i][j] == 0:
