@@ -1,3 +1,6 @@
+#1. 
+# --------------------------------------------------------------------
+# 2.
 n, m = map(int, input().split())
 stack = []
 arr = [i for i in range(1, n+1)]
@@ -15,4 +18,3 @@ def nm(cnt):
             stack.pop()
 
 nm(1)
-print(arr)
