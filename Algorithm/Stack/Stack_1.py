@@ -149,3 +149,44 @@ for i in range(10):
     print(f'#{i+1} {password(int(n), arr)}')
 
 # ----------------------------------------------------------------------------------
+# 파스칼
+T = int(input())
+ 
+ 
+def pascal(n):
+    triangle = [[1]]
+    print(*triangle[0])
+    for i in range(1, n):
+        row = [1]
+        for j in range(1, i):
+            row.append(triangle[i-1][j-1] + triangle[i-1][j])
+        row.append(1)
+        triangle.append(row)
+        print(*row)
+ 
+for k in range(1, T+1):
+    n = int(input())
+    print(f'#{k}')
+    pascal(n)
+
+# -------------------------------------------------------------------------------------
+# 콜라츠 추측
+T = int(input())
+ 
+ 
+def cola(n, cnt):
+    if n == 1:
+        return cnt
+ 
+    if n % 2 == 0:
+        n = n // 2
+        return cola(n, cnt + 1)
+ 
+    if n % 2 == 1:
+        n = n * 3 + 1
+        return cola(n, cnt + 1)
+ 
+for k in range(1, T+1):
+    n = int(input())
+    cnt = 0
+    print(f'#{k} {cola(n, cnt)}')
