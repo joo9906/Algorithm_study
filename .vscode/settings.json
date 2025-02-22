@@ -1,0 +1,9 @@
+{
+    "python.terminal.executeInFileDir": true,
+    "python.terminal.launchArgs": [
+        "-u"
+    ],
+    "code-runner.executorMap": {
+        "python": "python -u $fullFileName < input.in"
+    }
+}

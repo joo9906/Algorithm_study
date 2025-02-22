@@ -1,37 +1,114 @@
 from collections import deque
-import sys
-sys.stdin = open('input.in', 'r')
 
-T = int(input())
+# 톱니바퀴 좀 무식하게 푼 거
+saw = [None] + [deque(map(int, input())) for _ in range(4)]
 
-def find(start, under): 
-    while inj[start]:
-        node = inj[start].popleft()
-        under.append(node)
-        visited[node] = True
-        find(node, under)
-    return under
+roll = int(input())
+turn = deque()
 
-for nums in range(1, T+1):
-    people = int(input())
-    visited = [False] * (people)
-    start = 0
-    under = []
-    boss = 0
-    inj = [deque() for _ in range(people)]
+for i in range(roll):
+    n, m = map(int, input().split())
+    turn.append((n, m))
 
-    arr = [list(map(int, input().split())) for _ in range(people)] 
+def turn_clock(num):
+    saw[num].appendleft(saw[num].pop())
     
-    for i in range(people): # 누가 누구랑 연결되어있는지 arr을 순회하며 찾음
-        for j in range(people):
-            if arr[i][j] == 1:
-                inj[i].append(j)
-                
-    for k in range(len(inj)):
-            if 0 in inj[k]:
-                boss = k
-                
-    
+def turn_counter(num):
+    saw[num].append(saw[num].popleft())
 
-    print(f'#{nums} boss:{boss} / under:', end = '')
-    print(*find(start, under))
+def turn_func(saw, roll, turn):
+    for _ in range(roll):
+        num, direct = turn.popleft()
+        
+        if direct == 1:
+            if num == 1:
+                if saw[1][2] != saw[2][6]:
+                    if saw[2][2] != saw[3][6]:
+                        if saw[3][2] != saw[4][6]:
+                            turn_counter(4)
+                        turn_clock(3)
+                    turn_counter(2)
+                turn_clock(1)
+                
+            elif num == 2:
+                if saw[1][2] != saw[2][6]:
+                    turn_counter(1)
+                    
+                if saw[2][2] != saw[3][6]:
+                    if saw[3][2] != saw[4][6]:
+                        turn_clock(4)
+                    turn_counter(3)
+                turn_clock(2)
+            
+            elif num == 3:
+                if saw[3][2] != saw [4][6]:
+                    turn_counter(4)
+                
+                if saw[3][6] != saw[2][2]:
+                    if saw[1][2] != saw[2][6]:
+                        turn_clock(1)
+                    turn_counter(2)
+            
+            elif num == 4:
+                if saw[4][6] != saw[3][2]:
+                    if saw[3][6] != saw[2][2]:
+                        if saw[2][6] != saw[1][2]:
+                            turn_counter(1)
+                        turn_clock(2)
+                    turn_counter(3)
+                turn_clock(4)
+        
+        elif direct == -1:
+            if num == 1:
+                if saw[1][2] != saw[2][6]:
+                    if saw[2][2] != saw[3][6]:
+                        if saw[3][2] != saw[4][6]:
+                            turn_clock(4)
+                        turn_counter(3)
+                    turn_clock(2)
+                turn_counter(1)
+                
+            elif num == 2:
+                if saw[1][2] != saw[2][6]:
+                    turn_clock(1)
+                    
+                if saw[2][2] != saw[3][6]:
+                    if saw[3][2] != saw[4][6]:
+                        turn_counter(4)
+                    turn_clock(3)
+                turn_counter(2)
+            
+            elif num == 3:
+                if saw[3][2] != saw[4][6]:
+                    turn_clock(4)
+                
+                if saw[3][6] != saw[2][2]:
+                    if saw[1][2] != saw[2][6]:
+                        turn_counter(1)
+                    turn_clock(2)
+                turn_counter(3)
+            
+            elif num == 4:
+                if saw[4][6] != saw[3][2]:
+                    if saw[3][6] != saw[2][2]:
+                        if saw[2][6] != saw[1][2]:
+                            turn_clock(1)
+                        turn_counter(2)
+                    turn_clock(3)
+                turn_counter(4)
+            
+    cnt = 0
+    for i in range(1, 5):
+        if saw[i][0] == 1:
+            if i == 1:
+                cnt +=1
+            elif i == 2:
+                cnt +=2
+            elif i == 3:
+                cnt += 4
+            elif i == 4:
+                cnt += 8
+    
+    return cnt
+
+print(turn_func(saw, roll, turn))
