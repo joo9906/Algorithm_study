@@ -1,171 +1,47 @@
-from collections import deque
+N, M = map(int, input().split())
+r, c, d = map(int, input().split()) # (r, c)가 로봇 청소기의 첫 좌표, d는 첫 방향
+arr = [list(map(int, input().split())) for _ in range(N)]
+delta = [[-1, 0], [0, 1],  [1, 0], [0, -1]] # 북동남서 순서(문제에서 주어진 방향 순서대로)
+check_point = 0
 
-# 톱니바퀴 좀 무식하게 푼 거
-saw = [None] + [deque(map(int, input())) for _ in range(4)]
+def find(r, c):
+    for x, y in delta:  # 지금 좌표 기준으로 시계방향 탐색
+        nx = x + r
+        ny = y + c
+        if arr[nx][ny] != 1 and arr[nx][ny] != 2: # 다음 좌표가 벽이나 청소된 곳이 아니라면
+            return True
+    return False
 
-roll = int(input())
-turn = deque()
+# 0은 청소 가능한 곳, 1은 벽, 2는 이미 청소한 곳
+def cleaning():
+    global r, c, check_point
 
-for i in range(roll):
-    n, m = map(int, input().split())
-    turn.append(deque([n, m]))
+    turn_point = d  # 델타에서 받아올 방향의 index
+    cnt = 0 # 몇 칸이나 청소 했는지
+    nx = r # 시작점의 x 좌표
+    ny = c # 시작점의 y 좌표
 
-def turn_clock(num):
-    saw[num].appendleft(saw[num].pop())
-    
-def turn_counter(num):
-    saw[num].append(saw[num].popleft())
+    while True:
+        if arr[nx][ny] == 0:  # 현재 좌표의 값이 0이면 그 칸 청소
+            cnt += 1
+            arr[nx][ny] = 2   # 청소 했으니 2로 표시
 
-def turn_func(saw, roll, turn):
-    for _ in range(roll):
-        num, direct = turn.popleft()
-        
-        if direct == 1:
-            if num == 1:
-                if saw[1][2] != saw[2][6]:
-                    if saw[2][2] != saw[3][6]:
-                        if saw[3][2] != saw[4][6]:
-                            turn_counter(4)
-                        turn_clock(3)
-                    turn_counter(2)
-                turn_clock(1)
-                
-            elif num == 2:
-                if saw[1][2] != saw[2][6]:
-                    turn_counter(1)
-                    
-                if saw[2][2] != saw[3][6]:
-                    if saw[3][2] != saw[4][6]:
-                        turn_clock(4)
-                    turn_counter(3)
-                turn_clock(2)
-            
-            elif num == 3:
-                if saw[3][2] != saw [4][6]:
-                    turn_counter(4)
-                
-                if saw[3][6] != saw[2][2]:
-                    if saw[1][2] != saw[2][6]:
-                        turn_clock(1)
-                    turn_counter(2)
-            
-            elif num == 4:
-                if saw[4][6] != saw[3][2]:
-                    if saw[3][6] != saw[2][2]:
-                        if saw[2][6] != saw[1][2]:
-                            turn_counter(1)
-                        turn_clock(2)
-                    turn_counter(3)
-                turn_clock(4)
-        
-        elif direct == -1:
-            if num == 1:
-                if saw[1][2] != saw[2][6]:
-                    if saw[2][2] != saw[3][6]:
-                        if saw[3][2] != saw[4][6]:
-                            turn_clock(4)
-                        turn_counter(3)
-                    turn_clock(2)
-                turn_counter(1)
-                
-            elif num == 2:
-                if saw[1][2] != saw[2][6]:
-                    turn_clock(1)
-                    
-                if saw[2][2] != saw[3][6]:
-                    if saw[3][2] != saw[4][6]:
-                        turn_counter(4)
-                    turn_clock(3)
-                turn_counter(2)
-            
-            elif num == 3:
-                if saw[3][2] != saw[4][6]:
-                    turn_clock(4)
-                
-                if saw[3][6] != saw[2][2]:
-                    if saw[1][2] != saw[2][6]:
-                        turn_counter(1)
-                    turn_clock(2)
-                turn_counter(3)
-            
-            elif num == 4:
-                if saw[4][6] != saw[3][2]:
-                    if saw[3][6] != saw[2][2]:
-                        if saw[2][6] != saw[1][2]:
-                            turn_clock(1)
-                        turn_counter(2)
-                    turn_clock(3)
-                turn_counter(4)
-            
-    cnt = 0
-    for i in range(1, 5):
-        if saw[i][0] == 1:
-            if i == 1:
-                cnt +=1
-            elif i == 2:
-                cnt +=2
-            elif i == 3:
-                cnt += 4
-            elif i == 4:
-                cnt += 8
-    
-    return cnt
+        if not find(nx, ny):  # find를 해서 바꿀 수 있는 곳이 없으면 후진
+            x, y = delta[turn_point] # 후진하기 위해 현재 바라보고 있는 곳의 델타를 받아옴
+            if arr[nx-x][ny-y] == 1:  # 후진이 벽 때문에 불가능하면 작동을 멈춤
+                return cnt
+            else:  # 벽만 아니면 후진
+                nx -= x
+                ny -= y
 
-print(turn_func(saw, roll, turn))
+        else: # 갈 수 있는 곳이 하나라도 있으면 반시계 방향으로 90도 돌면서 실행
+            for _ in range(4):
+                turn_point = (turn_point -1) % 4 # 첫 시작은 받아온 방향의 반시계 90도, 계속 값을 바꿔가며 사방을 찾음
+                x, y = delta[turn_point]
+                if arr[nx+x][ny+y] == 0:  # 갈 수 있다면 nx값과 ny값을 바꾸고 while문 탈출
+                    nx += x
+                    ny += y
+                    break
 
 
-
-
-
-# 깔끔하게 정리한 거
-saw = [None] + [deque(map(int, input())) for _ in range(4)]
-
-roll = int(input())
-turn = [tuple(map(int, input().split())) for _ in range(roll)]
-
-# 시계 방향 회전
-def turn_clock(num):
-    saw[num].appendleft(saw[num].pop())
-
-# 반시계 방향 회전
-def turn_counter(num):
-    saw[num].append(saw[num].popleft())
-
-def turn_func():
-    for num, direct in turn:
-        rotate = [0] * 5  # 톱니 번호는 1부터 시작하니까 5개로 만들어서 0 남김
-        rotate[num] = direct  # 해당 톱니바퀴의 회전 방향 기록
-
-        # num번째 톱니 기준 왼쪽 확인
-        for i in range(num, 1, -1):
-            if saw[i][6] != saw[i - 1][2]:  # 맞닿은 톱니가 다르면 반대 방향 회전
-                rotate[i - 1] = -rotate[i]  # 시계/반시계가 1, -1이니까 그 뜻
-            else:
-                break
-
-        # nu번째 톱니 기준 오른쪽 확인
-        for i in range(num, 4):
-            if saw[i][2] != saw[i + 1][6]:
-                rotate[i + 1] = -rotate[i]
-            else:
-                break
-
-        for i in range(1, 5):
-            if rotate[i] == 1: #시계방향 회전
-                turn_clock(i)
-            elif rotate[i] == -1: # 반시계방향 회전
-                turn_counter(i)
-
-    cnt = 0
-    for i in range(1, 5):
-        if saw[i][0] == 1:
-            if i == 1:
-                cnt +=1
-            elif i == 2:
-                cnt +=2
-            elif i == 3:
-                cnt += 4
-            elif i == 4:
-                cnt += 8
-
-print(turn_func())
+print(cleaning())

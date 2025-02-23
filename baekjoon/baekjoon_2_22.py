@@ -113,3 +113,225 @@ def turn_func():
                 cnt += 8
 
 print(turn_func())
+
+# ---------------------------------------------------------------
+# 톱니바퀴 좀 무식하게 푼 거
+saw = [None] + [deque(map(int, input())) for _ in range(4)]
+
+roll = int(input())
+turn = deque()
+
+for i in range(roll):
+    n, m = map(int, input().split())
+    turn.append((n, m))
+
+def turn_clock(num):
+    saw[num].appendleft(saw[num].pop())
+    
+def turn_counter(num):
+    saw[num].append(saw[num].popleft())
+
+def turn_func(saw, roll, turn):
+    for _ in range(roll):
+        num, direct = turn.popleft()
+        
+        if direct == 1:
+            if num == 1:
+                if saw[1][2] != saw[2][6]:
+                    if saw[2][2] != saw[3][6]:
+                        if saw[3][2] != saw[4][6]:
+                            turn_counter(4)
+                        turn_clock(3)
+                    turn_counter(2)
+                turn_clock(1)
+                
+            elif num == 2:
+                if saw[1][2] != saw[2][6]:
+                    turn_counter(1)
+                    
+                if saw[2][2] != saw[3][6]:
+                    if saw[3][2] != saw[4][6]:
+                        turn_clock(4)
+                    turn_counter(3)
+                turn_clock(2)
+            
+            elif num == 3:
+                if saw[3][2] != saw [4][6]:
+                    turn_counter(4)
+                
+                if saw[3][6] != saw[2][2]:
+                    if saw[1][2] != saw[2][6]:
+                        turn_clock(1)
+                    turn_counter(2)
+            
+            elif num == 4:
+                if saw[4][6] != saw[3][2]:
+                    if saw[3][6] != saw[2][2]:
+                        if saw[2][6] != saw[1][2]:
+                            turn_counter(1)
+                        turn_clock(2)
+                    turn_counter(3)
+                turn_clock(4)
+        
+        elif direct == -1:
+            if num == 1:
+                if saw[1][2] != saw[2][6]:
+                    if saw[2][2] != saw[3][6]:
+                        if saw[3][2] != saw[4][6]:
+                            turn_clock(4)
+                        turn_counter(3)
+                    turn_clock(2)
+                turn_counter(1)
+                
+            elif num == 2:
+                if saw[1][2] != saw[2][6]:
+                    turn_clock(1)
+                    
+                if saw[2][2] != saw[3][6]:
+                    if saw[3][2] != saw[4][6]:
+                        turn_counter(4)
+                    turn_clock(3)
+                turn_counter(2)
+            
+            elif num == 3:
+                if saw[3][2] != saw[4][6]:
+                    turn_clock(4)
+                
+                if saw[3][6] != saw[2][2]:
+                    if saw[1][2] != saw[2][6]:
+                        turn_counter(1)
+                    turn_clock(2)
+                turn_counter(3)
+            
+            elif num == 4:
+                if saw[4][6] != saw[3][2]:
+                    if saw[3][6] != saw[2][2]:
+                        if saw[2][6] != saw[1][2]:
+                            turn_clock(1)
+                        turn_counter(2)
+                    turn_clock(3)
+                turn_counter(4)
+            
+    cnt = 0
+    for i in range(1, 5):
+        if saw[i][0] == 1:
+            if i == 1:
+                cnt +=1
+            elif i == 2:
+                cnt +=2
+            elif i == 3:
+                cnt += 4
+            elif i == 4:
+                cnt += 8
+    
+    return cnt
+
+print(turn_func(saw, roll, turn))
+
+# -----------------------------------------------------------------
+# 주사위 굴리기
+
+# from collections import deque
+
+N, M, start_x, start_y, K = map(int, input().split())
+jido = [list(map(int, input().split())) for _ in range(N)]
+comp = deque(list(map(int, input().split()))) #선입선출 할거니까 popleft 쓰려고 deque으로 받음
+
+# 1 2 3 4로 방위를 받으니 그 순서대로 동 서 북 남 delta를 설정
+delta = [[None], [0,1], [0, -1], [-1, 0], [1, 0]] 
+dice = [0] * 7 # 주사위 6면(0은 어차피 안쓰니까 인덱스로 쓰려고)
+num = 6 # 얘는 저 밑에 코드를 다 짜고 뒤늦게 발견해서 안고친거임... num 들어간 부분 다 6으로 써도 됨
+
+# dicing 함수는 방위를 받고 그걸 기준으로 바뀌는 주사위의 면들을 첫 전개도로 고정시킴
+# 뭐라고 해야하나... 주사위를 굴리는걸 표현한건데 동서남북으로 주사위를 굴렸을 때
+# 1번 자리에 4번이 오고 6번 자리에 3번이 오고..... 하는 것들을 표현 해준 것
+# 그림 그려서 해보면 더 편하게 지정 가능할 듯 합니다..
+# 그냥 뇌로 되면 제발 뇌 이식 좀. 전 능지 딸려서 안됨
+
+def dicing(direction):
+    global dice 
+    # 이놈을 global로 안받으면 밑부분이 지들끼리 북치고 장구쳐서 dice에
+    # 하나도 반영이 안됩니다. 어떻게 알았냐구요? 묻지 마쇼.
+    
+    if direction == 1:
+        dice[1], dice[6], dice[3], dice[4]  = dice[4], dice[3], dice[1], dice[6]
+        
+    elif direction == 2:
+        dice[1], dice[6], dice[3], dice[4]  = dice[3], dice[4], dice[6], dice[1]
+        
+    elif direction == 3: 
+        dice[1], dice[2], dice[6], dice[5] = dice[5], dice[1], dice[2], dice[6]
+        
+    elif direction == 4: # 여기서 숫자 바꿔 써서 3번 실패함... 설정 잘 하세요...ㅎ...
+        dice[1], dice[2], dice[5], dice[6],  = dice[2], dice[6], dice[1], dice[5]
+        
+    
+while comp: # 방향 전환을 받아온 만큼 실행(for문으로 쓰면 K번 반복하면 됨)
+    direction = comp.popleft() # 선입선출로 방향을 comp에서 뽑아옴
+    dx, dy = delta[direction]  # 델타의 direction번째에서 dx와 dy를 뽑아옴
+    nx = start_x + dx # nx = 굴러간 x 좌표
+    ny = start_y + dy # ny = 굴러간 y 좌표
+
+    if 0 <= nx < N and 0 <= ny < M: # 굴린 다음 지도 안에 있어야 실행이니까
+        dicing(direction)
+
+        if jido[nx][ny] == 0: #지도의 nx, ny 좌표가 0이면 지도에 dice[6]의 숫자를 입력
+            jido[nx][ny] = dice[num]
+            
+        else: # 지도의 nx, ny 좌표가 0이 아니면 dice[6]에 지도의 숫자를 입력
+            dice[num] = jido[nx][ny]
+            jido[nx][ny] = 0 # dice에 입력 했으면 해당 좌표 지도의 숫자는 0으로 바꿈
+        
+        # dicing 함수에서 1은 무조건 위로 오게끔 만들어 뒀으므로 1만 출력하면 됨
+        print(dice[1]) 
+        start_x, start_y = nx, ny # 다 끝난 다음 x, y좌표를 바꿔줌
+
+# ------------------------------------------------------------------
+# 로봇청소기
+N, M = map(int, input().split())
+r, c, d = map(int, input().split()) # (r, c)가 로봇 청소기의 첫 좌표, d는 첫 방향
+arr = [list(map(int, input().split())) for _ in range(N)]
+delta = [[-1, 0], [0, 1],  [1, 0], [0, -1]] # 북동남서 순서(문제에서 주어진 방향 순서대로)
+check_point = 0
+
+def find(r, c):
+    for x, y in delta:  # 지금 좌표 기준으로 시계방향 탐색
+        nx = x + r
+        ny = y + c
+        if arr[nx][ny] != 1 and arr[nx][ny] != 2: # 다음 좌표가 벽이나 청소된 곳이 아니라면
+            return True
+    return False
+
+# 0은 청소 가능한 곳, 1은 벽, 2는 이미 청소한 곳
+def cleaning():
+    global r, c, check_point
+
+    turn_point = d  # 델타에서 받아올 방향의 index
+    cnt = 0 # 몇 칸이나 청소 했는지
+    nx = r # 시작점의 x 좌표
+    ny = c # 시작점의 y 좌표
+
+    while True:
+        if arr[nx][ny] == 0:  # 현재 좌표의 값이 0이면 그 칸 청소
+            cnt += 1
+            arr[nx][ny] = 2   # 청소 했으니 2로 표시
+
+        if not find(nx, ny):  # find를 해서 바꿀 수 있는 곳이 없으면 후진
+            x, y = delta[turn_point] # 후진하기 위해 현재 바라보고 있는 곳의 델타를 받아옴
+            if arr[nx-x][ny-y] == 1:  # 후진이 벽 때문에 불가능하면 작동을 멈춤
+                return cnt
+            else:  # 벽만 아니면 후진
+                nx -= x
+                ny -= y
+
+        else: # 갈 수 있는 곳이 하나라도 있으면 반시계 방향으로 90도 돌면서 실행
+            for _ in range(4):
+                turn_point = (turn_point -1) % 4 # 첫 시작은 받아온 방향의 반시계 90도, 계속 값을 바꿔가며 사방을 찾음
+                x, y = delta[turn_point]
+                if arr[nx+x][ny+y] == 0:  # 갈 수 있다면 nx값과 ny값을 바꾸고 while문 탈출
+                    nx += x
+                    ny += y
+                    break
+
+print(cleaning())
+
