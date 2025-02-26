@@ -1,5 +1,19 @@
 from collections import deque
 
-dice = deque([0] * 7) # 주사위 6면(0번째는 세지 않으면 됨)
-comp = deque(list(map(int, input().split())))
-print(comp)
+n = int(input())
+student = [list(map(int, input().split())) for _ in range(n)]
+
+def compare():
+    cnt = 1
+    result = []
+    for i in range(n):
+        weight, height = student[i]
+        for j in range(n):
+            x, y = student[j]
+            if x > weight and y > height:
+                cnt +=1
+        result.append(cnt)
+        cnt = 1
+    return print(*result)
+
+compare()
