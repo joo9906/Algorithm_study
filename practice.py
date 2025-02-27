@@ -4,30 +4,28 @@ import sys
 # 표준 입력을 input.in 파일로 설정
 sys.stdin = open("input.in", "r")
 
-def tttt():
-    N = int(input())
-    top = list(map(int, input().split()))
-    result = [0] * N
-    ind = []
+def func():
+    n, m = map(int, input().split())
+    target = deque(map(int, input().split()))
+    arr = deque([i for i in range(1, n+1)])
+    cnt = 0
 
-    for i in range(N):
-        target = top.pop()
-        a = len(top) - 1
-        while True:
-            if a == 0:
-                result.appendleft(0)
-                break
+    while target:
+        a = arr.popleft()
+        b = target.popleft()
+        middle = int(len(arr)/2)
 
-            num_index = a
-            now_num = top[num_index]
+        if b in list(arr)[:middle]:
+            while a != b:
+                arr.append(a)
+                a = arr.popleft()
+                cnt += 1
+        else:
+            while a != b:
+                arr.appendleft(a)
+                a = arr.pop()
+                cnt += 1
 
-            if now_num >= target:
-                result.appendleft(num_index)
-                break
+    return print(cnt)
 
-            a -= 1
-
-
-    return print(*result)
-
-tttt()
+func()
