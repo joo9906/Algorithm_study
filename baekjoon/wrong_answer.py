@@ -161,3 +161,63 @@ def turn_func(saw, roll, turn):
     return cnt
 
 print(turn_func(saw, roll, turn))
+
+# -------------------------------------------------------------------
+# SWEA 맨 위 문제 틀린거(백트래킹 안씀)
+T = int(input())
+
+def ballon():
+    n = int(input())
+    arr = list(map(int, input().split()))
+    cnt = 0
+
+    for _ in range(n):
+        max_score = 0
+        ind = 1
+        if len(arr) > 3:
+            for i in range(1, len(arr)-1):
+                score = arr[i-1]*arr[i+1]
+                if score > max_score:
+                    max_score = score
+                    ind = i
+                elif score == max_score:
+                    if ind > i:
+                        continue
+                    else:
+                        ind = i
+                else:
+                    continue
+            arr.pop(ind)
+            cnt += max_score
+            print(max_score)
+
+        elif len(arr) == 3:
+            if arr[0] == max(arr):
+                cnt += arr[0] * arr[2]
+                cnt += arr[0]
+                cnt += arr[0]
+                break
+
+            elif arr[2] == max(arr):
+                cnt += arr[0]*arr[2]
+                cnt += arr[2]
+                cnt += arr[2]
+                break
+
+            elif arr[1] == max(arr):
+                score = arr[0]*arr[2]
+                if arr[1]*3 > score:
+                    cnt += (arr[1]*3)
+                else:
+                    cnt += score
+                    if arr[0] > arr[1]:
+                        cnt += (arr[0]*2)
+                    else:
+                        cnt += arr[2]*2
+                break              
+    return cnt
+
+for k in range(1, T+1):
+    print(f'#{k} {ballon()}')
+
+# -----------------------------------------------------------------
