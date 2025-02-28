@@ -12,17 +12,17 @@ base = 0 #시작하는 노드
 
 def dungeon(cnt):
     global k
+    to, cost = route[base].pop()
 
-    if cnt > k:
-        return result.append(to)
+    if cnt + cost > k:
+        return
 
-    to, cost = route[base].pop(0)
     cnt += cost
     if cnt <= k:
         result.append(to)
-        dungeon
+        dungeon(cnt)
     else:
-
+        return
     
     
-dungeon()
+dungeon(0)
