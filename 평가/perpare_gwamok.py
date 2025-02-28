@@ -316,3 +316,46 @@ for q in range(1, T+1):
     print(f'#{q}')
     num()
 
+# ---------------------------------------------------------------------------
+# 1244 스위치 켜고 끄기
+def turn(arr, n):
+    if arr[n] == 0:
+        arr[n] = 1
+    elif arr[n] == 1:
+        arr[n] = 0
+
+def boy(arr, num, n):
+    for i in range(num-1, len(arr), num):
+        turn(arr, i)
+
+def girl(arr, num, find):
+    if num - find < 0 or num + find >= len(arr) or arr[num - find] != arr[num + find]:
+        return turn(arr, num)
+    elif arr[num-find] == arr[num+find]:
+        turn(arr, num-find)
+        turn(arr, num+find)
+        girl(arr, num, find+1)
+
+def off():
+    n = int(input())
+    arr = list(map(int, input().split()))
+    head = int(input())
+    people = [list(map(int, input().split())) for _ in range(head)]
+
+    for x, y in people:
+        if x == 1:
+            boy(arr, y, n)
+        elif x == 2:
+            girl(arr, y-1, 1)
+
+    cnt = 0
+    for i in arr:
+        print(i, end=' ')
+        cnt += 1
+        if cnt == 20:
+            print()
+            cnt = 0
+
+off()
+
+# -----------------------------------------------------------------------------
