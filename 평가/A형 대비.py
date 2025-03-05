@@ -32,4 +32,109 @@ for j in range(1, T+1):
     print(f'#{j}', *sorted(result))
 
 # --------------------------------------------------------------------------------------
-# 
+# A형 틀린거
+T = int(input())
+
+def tree_height(n, trees, day):
+    global date
+    if trees.count(max(trees)) == n:
+        date = day
+        return
+    
+    stack = sorted(list(set(trees)))
+    biggest = stack.pop()
+    while stack:
+        target = stack.pop()
+
+        if target == biggest:
+            continue
+        a = trees.index(target)
+
+        if day % 2 == 0 :
+            if biggest >= target + 2:
+                trees[a] += 2
+                tree_height(n, trees, day + 1)
+                break
+            elif biggest == target + 1:
+                if stack:
+                    continue
+                else:
+                    tree_height(n, trees, day + 1)
+
+
+        if day % 2 == 1:
+            if biggest == target + 2:
+                if target == min(trees):
+                    if trees.count(target) > 1:
+                        trees[a] += 1
+                        tree_height(n, trees, day+1)
+                        break
+                    else:
+                        tree_height(n, trees, day+1)
+                        break
+                else:
+                    continue
+
+            elif biggest >= target + 1:
+                trees[a] += 1
+                tree_height(n, trees, day + 1)
+                break
+
+for k in range(1, T+1):
+    n = int(input())
+    trees = list(map(int, input().split()))
+    date = 0
+    tree_height(n, trees, 1)
+    print(f'#{k} {date-1}')
+
+# -----------------------------------------------------------------------------------
+# A형 While 버전
+T = int(input())
+
+def tree_height(n, trees, day):
+    while trees.count(max(trees)) != n:
+      stack = sorted(list(set(trees)))
+      biggest = stack.pop()
+
+      while stack:
+          target = stack.pop()
+
+          if target == biggest:
+              continue
+          a = trees.index(target)
+
+          if day % 2 == 0 :
+              if biggest >= target + 2:
+                  trees[a] += 2
+                  day+=1
+                  break
+              elif biggest == target + 1:
+                  if stack:
+                      continue
+                  else:
+                      day+=1
+
+
+          if day % 2 == 1:
+              if biggest == target + 2:
+                  if target == min(trees):
+                      if trees.count(target) > 1:
+                          trees[a] += 1
+                          day+=1
+                          break
+                      else:
+                          day+=1
+                          break
+                  else:
+                      continue
+
+              elif biggest >= target + 1:
+                  trees[a] += 1
+                  day+=1
+                  break
+    return day
+
+for k in range(1, T+1):
+    n = int(input())
+    trees = list(map(int, input().split()))    
+    print(f'#{k} {tree_height(n, trees, 1)-1}')

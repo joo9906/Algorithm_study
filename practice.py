@@ -7,7 +7,6 @@ def maze():
     arr = [list(map(int, input().strip())) for _ in range(n)]
     
     q = deque([(0, 0, 1)])
-    arr[0][0] = 0
 
     delta = [(0, 1), (1, 0), (0, -1), (-1, 0)]
     
