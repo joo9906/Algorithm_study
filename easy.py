@@ -1,20 +1,22 @@
+import math
+import time
 
-def make_tree(start, end, i):
-    if start == end:
-        print(i)
-        binary_tree[i] = arr[i]
-        return
-
-    mid = (start+end) // 2
-    make_tree(start, mid, i*2)
-    make_tree(mid+1, end, i*2+1)
+def inorder(n, last):
+    global cnt
+    if n <= last:
+        inorder(n * 2, last)
+        tree[n] = cnt
+        cnt += 1
+        inorder(n * 2 + 1, last)
 
 
-T = int(input())
+for tc in range(int(input())):
+    start = time.time()
 
-for k in range(1, T+1):
-    n = int(input())
-    arr = [i for i in range(1, n+1)]
-    binary_tree = [0] * (len(arr) + 2)
-    make_tree(0, len(arr)-1, 1)
-    print(binary_tree)
+    N = int(input())
+    tree = [0] * (N + 1)
+    cnt = 1
+    inorder(1, N)
+    print(f'#{tc + 1} {tree[1]} {tree[int(N / 2)]}')
+    end = time.time()
+    print(f'{end-start:.5f} sec')
