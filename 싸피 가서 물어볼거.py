@@ -37,9 +37,6 @@ diction.add('hello')
 print(diction.search('hi'))
 diction.remove('hi')
 print(diction.head)
-print(diction.search('hi'))
-print(diction.search('hello'))
-print(diction.search('hel'))
 
 # 여기에 삭제를 하는 방법이 이게 맞나, head를 꺼내봤을 때 h - i - i:false인건데 이래도 되는건가?
 
@@ -52,3 +49,20 @@ segment tree를 만든다고 미리 더해두나 필요할 때 더하나 거기�
 segment tree를 생성하고 부분합 구하는데 O(n+logn) 만큼 걸리는데 리스트는 만들고(O(n)) 찾는(O(n))에서 시간 복잡도 차이가 나는게 맞는지
 구간 업데이트에서 왜 차이가 나는지 - 세그먼트의 업데이트는 알겠는데 리스트도 딱히 큰차이가 없는게 아닌가?
 '''
+
+#세그먼트 생성
+
+def segment(left, right, i):
+    if left == right:
+        segment_tree[i] = arr[left]
+        return segment_tree[i]
+
+    mid = (right+left) // 2
+    segment_tree[i] = segment(left, mid, i*2) + segment(mid+1, right, i*2+1)
+
+    return segment_tree[i]
+
+arr = [i for i in range(1, 11)]
+segment_tree = [0] * (len(arr) * 4)
+segment(0, len(arr)-1, 1)
+print(segment_tree)
