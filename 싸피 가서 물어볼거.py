@@ -18,6 +18,7 @@ class Trie:
             if ch not in cur:
                 return False
             cur = cur[ch]
+
         if cur[ch] == True: # 마지막 ch에서 True라면 단어가 있음
             return True
         else:
@@ -35,8 +36,7 @@ diction = Trie()
 diction.add("hi")
 diction.add('hello')
 print(diction.search('hi'))
-diction.remove('hi')
-print(diction.head)
+print(diction.search('hell'))
 
 
 
@@ -47,7 +47,6 @@ from math import ceil, log
 arr = [1, 6, 2, 4, 8, 3, 7]
 
 class segment():
-
     def __init__(self, arr):
         self.arr = arr
         self.n = len(arr)

@@ -1,37 +1,46 @@
 import sys
-import math
-import time
-sys.stdin = open("input.in", 'r')
-input = sys.stdin.read
-T = int(input())
+input = sys.stdin.readline
 
-class binary:
-    def __init__(self, n):
-        self.tree = [0] * (n + 2)
-        self.depth = 1
-        self.n = n
+class minsegment:
+    def __init__(self, arr):
+        self.arr = arr
+        self.n = len(arr)
+        self.tree = [0] * (self.n * 4)
 
+    def build(self, left, right, i = 1):
+        if left == right:
+            self.tree[i] = self.arr[left]
+            return self.tree[i]
 
-    def build(self, i = 1):
-        if i > self.n:
-            return
+        mid = (left + right) // 2
+        self.tree[i] = min(self.build(left, mid, i * 2), self.build(mid+1, right, i * 2 +1))
+        return self.tree[i]
 
-        self.build(i * 2)
-        self.tree[i] = self.depth
-        self.depth += 1
-        self.build(i * 2 + 1)
+    def search(self, start, end, left, right, i = 1):
+        if right < start or end < left:
+            return 1e9
 
+        if left <= start and end <= right:
+            return self.tree[i]
 
-    def search(self):
-        target = int(self.n / 2) # Tq 2번 노드에 저장된 값으로 나누고 있어서 1시간동안 답이 안나옴
-        return print(self.tree[1], self.tree[target])
+        mid = (start + end) // 2
+        return min(self.search(start, mid, left, right, i * 2), self.search(mid+1, end, left, right, i * 2 +1))
 
-for k in range(1, T+1):
-    start = time.time()
-    N = int(input())
-    tree = binary(N)
-    tree.build()
-    print(f'#{k}', end = ' ')
-    tree.search()
-    end = time.time()
-    print(f'{end-start:.5f} sec')
+n, m = map(int, input().split())
+arr = [int(input()) for _ in range(n)]
+tree = minsegment(arr)
+tree.build(0, n-1)
+
+target = []
+for i in range(m):
+    target.append(tuple(map(int, input().split())))
+
+for k in target:
+    if len(k) == 1:
+        start = k
+        end = k
+    else:
+        start = k[0] - 1
+        end = k[1] - 1
+
+    print(tree.search(0, n-1, start, end))
