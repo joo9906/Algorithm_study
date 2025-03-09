@@ -109,9 +109,9 @@ top5Keyword 함수는 mRet = [None] for _ in range(k) 로 주어지고 함수에
 함수의 return 값은 mRet의 길이이고 3 aaa bbb ccc 에서 3과 return값이 동일하다면 True, 이후에 mRet의 값들이 aaa bbb ccc인지 확인해서 순서와 값들이 일치하면 True
 
 문자열의 길이가 같고 문자가 하나만 다르면 같은 그룹으로 만들 수 있음
-예를 들어 aaa aab는 길이가 3이고 문자가 하나만 달라서 그룹 가능.
-aaa와 aab가 그룹이고 aab와 bab가 그룹이면 aaa와 bab도 그룹이다.
-
+예를 들어 aaa aab는 길이가 3이고 문자가 하나만 달라서  그룹이다.
+그룹 가능.
+aaa와 aab가 그룹이고 aab와 bab가 그룹이면 aaa와 bab도
 그룹 내에서 대표하는 문자열은 빈도수가 가장 많은 문자열이고 빈도가 같을 경우 사전순으로 나열 됨
 
 top5Keyword에서는 그룹의 크기가 가장 큰 단어가 앞으로 오고 크기가 같다면 사전순으로 나열 

@@ -1,6 +1,6 @@
 # Tree day 2 - 이진탐색
 import sys
-sys.stdin = open("input.in", 'r')
+sys.stdin = open("input.txt", 'r')
 
 T = int(input())
 
