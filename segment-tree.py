@@ -12,7 +12,7 @@ class sum_tree:
             return self.tree[i]
 
         mid = (left + right) // 2
-        self.tree[i] = self.build(left, mid, i * 2) + self.build(mid + 1, right, i * 2 +1)
+        self.tree[i] = self.build(left, mid, i * 2) + self.build(mid + 1, right, i * 2 + 1)
         return self.tree[i]
 
     def search(self, start, end, left, right, i = 1):
