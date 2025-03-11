@@ -1,5 +1,6 @@
 class Trie:
-    head = {}
+    def __init__(self):
+        self.head = {}
 
     def add(self, word):
         cur = self.head
@@ -15,7 +16,7 @@ class Trie:
         cur = self.head
 
         for ch in word:
-            if ch not in cur:
+            if ch not in cur[ch]:
                 return False
             cur = cur[ch]
 
@@ -36,4 +37,4 @@ diction = Trie()
 diction.add("hi")
 diction.add('hello')
 print(diction.search('hi'))
-print(diction.search('hell'))
+print(diction.search('helldklf'))

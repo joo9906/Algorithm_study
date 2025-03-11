@@ -83,3 +83,54 @@ def button(start, target):
 for i in range(1, T + 1):
     start, end = map(int, input().split())
     print(f'#{i} {button(start, end)}')
+
+# Hard 문제 ----------------------------------------------------
+def lock(start, target):
+    q = deque([(start, '')])
+    visited = set([start])
+    operations = ['D', 'S', 'L', 'R']
+    result = None
+
+    while q:
+        nums, save = q.popleft()
+
+        if nums == target:
+            if result is None or len(save) < len(result):
+                result = save
+            elif len(save) == len(result):
+                if operations.index(save[0]) < operations.index(result[0]):
+                    result = save
+
+        for op in operations:
+            if op == 'D':
+                next_nums = str(int(nums) * 2 % 10000).zfill(4)
+            elif op == 'S':
+                if nums == '0000':
+                    next_nums = '9999'
+                else:
+                    next_nums = str(int(nums) - 1).zfill(4)
+            elif op == 'L':
+                next_nums = nums[1:] + nums[0]
+            elif op == 'R':
+                next_nums = nums[-1] + nums[:-1]
+
+            if next_nums not in visited:
+                q.append((next_nums, save + op))
+                visited.add(next_nums)
+
+    return result
+
+
+T = int(input())
+
+for k in range(1, T + 1):
+    start, end = map(str, input().split())
+    start = start.zfill(4)
+    end = end.zfill(4)
+
+    result = lock(start, end)
+
+    if result:
+        print(f'#{k} {result}')
+    else:
+        print(f'#{k} -1')

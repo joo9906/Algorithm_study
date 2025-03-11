@@ -22,7 +22,6 @@ class binary:
         self.depth += 1
         self.build(mid+1, right, i * 2 + 1)
 
-
     def search(self):
         target = int(self.n / 2) # Tq 2번 노드에 저장된 값으로 나누고 있어서 1시간동안 답이 안나옴
         return print(self.tree[1], self.tree[target])

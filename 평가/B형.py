@@ -62,3 +62,41 @@ add로 저장 할 배열을 heapq로 만들어 둠. 가중치가 가장 작은 �
 이거 터질듯 ㅋㅋ루삥뽕
 
 '''
+from typing import List
+from user import init, adding, top5Keyword
+
+INIT = 100
+ADD = 200
+Question = 300
+
+
+def run():
+    flag = True
+    Q = int(input())
+    for _ in range(Q):  # Q개의 action 및 인풋
+        inputs = iter(input.split())
+        action = int(next(inputs))
+        if action == 100:
+            N = int(next(inputs))  # 예시 인풋 100 50
+            init(N)
+        elif action == 200:
+            new_word = next(inputs)  # 예시 인풋 200 abc
+            adding(new_word)
+        elif action == 300:  # 예시 인풋 3 aaa bbb ccc
+            R_list = [None for _ in range(5)]
+            user_query_answer = top5Keyword(R_list, R_list:List)
+            answer = int(next(inputs))
+            if answer != user_query_answer:
+                flag = False  # 에러 안나게 멈추지는 않고 flag만 바꾼다.
+            for __ in range(answer):
+                if R_list[i] != next(inputs):
+                    flag = False
+        else:
+            flag = False  # 입력이 이상할 때
+    return flag
+
+
+T, marker = list(map(int, input().split()))  # 테케수, 100점만점
+for tc in range(T):
+    # print(f"#{tc+1}", end="")
+    print(marker if run() else 0)
