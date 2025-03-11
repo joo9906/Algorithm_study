@@ -1,23 +1,20 @@
-if not result_list:
-    if save[0] == 'D':
-        heapq.heappush(result_list, (1, save))
-    elif save[0] == 'S':
-        heapq.heappush(result_list, (2, save))
-    elif save[0] == 'L':
-        heapq.heappush(result_list, (3, save))
-    elif save[0] == 'R':
-        heapq.heappush(result_list, (4, save))
+class tree:
+    def __init__(self, n):
+        self.n = n
+        self.tree = [0] * (n + 2)
+        self.build(1)
 
-if len(result_list) < 10 and len(result_list[0][1]) == len(save):
-    if save[0] == 'D':
-        heapq.heappush(result_list, (1, save))
-    elif save[0] == 'S':
-        heapq.heappush(result_list, (2, save))
-    elif save[0] == 'L':
-        heapq.heappush(result_list, (3, save))
-    elif save[0] == 'R':
-        heapq.heappush(result_list, (4, save))
-        
-elif len(result_list) == 10:
-    a = 
-    return 
+    def build(self, i=1):
+        print(i)
+        if i > self.n:
+            return
+
+        self.tree[i] = i
+        self.build(i * 2)
+        self.build(i * 2 + 1)
+
+    def check(self):
+        print(self.tree)
+
+tree = tree(6)
+tree.check()
