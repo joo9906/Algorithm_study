@@ -1,6 +1,6 @@
 T = int(input())
 
-def flag():
+def check():
     n, m = map(int, input().split()) # n = 배열의 길이, m = 바꿀 횟수
     arr = list(map(int, input().split())) # 초기 상태를 입력
     hard = [list(map(int, input().split())) for _ in range(m)] # 깃발을 바꿀 때 필요한 요소들을 m줄에 걸쳐 입력받아 리스트로 저장함
@@ -21,4 +21,4 @@ def flag():
 
 for k in range(1, T+1):
     print(f'#{k}', end = ' ')
-    flag()
+    check()
