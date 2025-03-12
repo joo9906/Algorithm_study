@@ -1,30 +1,46 @@
-# D = 현재 숫자를 두배로, 네 자리수는 1만으로 나눈 나머지로 만든다
-# S = 현재 숫자에서 1을 뺌. 0이라면 9999
-# L = 현재 숫자를 왼쪽으로 회전함. 1234 -> 2341
-# R = 현재 숫자를 오른쪽으로 회전. 1234 -> 4123
-from collections import deque
-import sys, heapq
-sys.stdin = open('input.txt', 'r')
+import heapq
+import sys
+sys.stdin = open("input.txt", 'r')
+
+class Recover:
+    def __init__(self, n, arr):
+        self.n = n
+        self.arr = arr
+
+    def route(self, arr):
+        delta = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        visited = [[1e9] * self.n for _ in range(self.n)]
+        visited[0][0] = arr[0][0]
+        q = [(arr[0][0], 0, 0)]
+
+        while q:
+            wv, x, y = heapq.heappop(q)
+
+            if wv > visited[x][y]: # 더 짧은 경로로 방문 시 넘어감
+                continue
+
+            if x == self.n-1 and y == self.n-1:
+                return wv
+
+            for dx, dy in delta:
+                nx = x + dx
+                ny = y + dy
+                if 0 <= nx < self.n and 0 <= ny < self.n:
+                    nwv = wv + arr[nx][ny]
+                    if nwv < visited[nx][ny]:
+                        visited[nx][ny] = nwv
+                        heapq.heappush(q, (nwv, nx, ny))
+
+    def result(self):
+        return self.route(self.arr)
 
 T = int(input())
-
-class tree:
-    def __init__(self, n):
-        self.n = n
-        self.tree = [0] * (n + 2)
-
-    def build(self, num, cnt, i = 1):
-        if i > self.n:
-            return
-
-        self.tree[i] = i
-        self.build(i * 2)
-        self.build(i * 2 + 1)
-
-    def check(self):
-        print(self.tree)
-
-
-
-
 for tc in range(1, T+1):
+    n = int(input())
+    arr = [list(map(int, input())) for _ in range(n)]
+    solve = Recover(n, arr)
+    print(f'#{tc} {solve.result()}')
+
+
+
+ 와 힙큐에 클래스에 이게  천재인가

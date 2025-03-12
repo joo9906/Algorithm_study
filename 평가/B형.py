@@ -100,3 +100,91 @@ T, marker = list(map(int, input().split()))  # 테케수, 100점만점
 for tc in range(T):
     # print(f"#{tc+1}", end="")
     print(marker if run() else 0)
+
+
+
+
+
+
+
+
+# 문영은 풀이 ----------------------------------------------------------------------------------
+from typing import List
+from collections import deque
+
+
+def init(N) -> None:
+    global NUMBER
+    global queue
+    global dt
+    NUMBER = N
+    queue = deque()
+    dt = {3: {}, 4: {}, 5: {}, 6: {}, 7: {}, 8: {}, 9: {}, 10: {}}
+
+
+def adding(mystr) -> None:
+    if len(queue) == NUMBER:
+        last_word = queue.popleft()
+        if dt[len(last_word)][last_word] == 1:
+            dt[len(last_word)].popitem(last_word)
+        else:
+            dt[len(last_word)][last_word] -= 1
+
+    else:
+        queue.append(mystr)
+        if dt[len(mystr)].get(mystr, None) == None:
+            dt[len(mystr)][mystr] = 1
+        else:
+            dt[len(mystr)][mystr] += 1
+
+
+def query(List: mRet[]) -> int:
+    m = []
+    for leng in range(3, 11):
+        if dt[leng] == {}:
+            continue
+        else:
+            # 전체를 돌며 1차 유사한 것들을 딕셔너리로 저장
+            sim = {}
+            for word, count in dt[leng].items():
+                stack = []
+                for w, val in dt[leng].items():
+                    count = 0
+                    for i in range(leng):
+                        if word[i] != w[i]:
+                            count += 1
+                    if count <= 1:
+                        stack.append((w, val))
+                sim[word] = stack
+
+            # bfs를 돌면서 유사도가 같은 경우를 담는다.
+            v = {}
+            for word, count in dt[leng].items():
+                if v.get(word, None) == None:
+                    v[word] = 0
+                    stack = [(word,count)]
+
+                    # bfs
+                    result = []
+                    while stack:
+                        s, num = stack.popleft()
+                        result.append((s, num))
+
+                        for w in sim[s]:
+                            if v.get(w[0], None) == None:
+                                stack.append((w[0],w[1]))
+                                v[w[0]]=0
+
+                    ##########################
+                    result.sort(lambda x: (-x[1], x[0]))
+                    total = 0
+                    for a in result:
+                        total += a[1]
+                    m.append(result[0][0], total)
+
+    m.sort(lambda x: (-x[1], x[0]))
+    for i in range(min(len(m), 5)):
+        mRet[i] = m[i]
+    answer = min(len(m), 5)
+
+    return answer
