@@ -1,46 +1,35 @@
-import heapq
+# visited를 설정해서 방문한 곳은 다시 방문하지 않도록 설정
+# 대각선으로만 움직일 수 있으니 델타
+# 시간은 상관 없음. 시작점으로 돌아가면 되는 거니까 nx ny가 시작점이면 종료하도록 설정
+#
+
+
+from collections import deque
 import sys
 sys.stdin = open("input.txt", 'r')
 
-class Recover:
-    def __init__(self, n, arr):
-        self.n = n
-        self.arr = arr
+class Dessert:
+    def __init__(self, N):
+        self.N = N
+        self.delta = [(1, 1), (1, -1), (-1, -1), (-1, 1)] # 길이 대각선만 가능하므로 5시, 7시, 11시, 1시
+        self.result = 0
+        self.visited = [[False] * self.N for _ in range(N)]
+        self.start_position = deque([(i, j) for i in range(N) for j in range(N)])
 
-    def route(self, arr):
-        delta = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-        visited = [[1e9] * self.n for _ in range(self.n)]
-        visited[0][0] = arr[0][0]
-        q = [(arr[0][0], 0, 0)]
+    def middle(self, start):
+        while start:
+            x, y = start.popleft()
 
-        while q:
-            wv, x, y = heapq.heappop(q)
 
-            if wv > visited[x][y]: # 더 짧은 경로로 방문 시 넘어감
-                continue
+    def tour(self, arr):
+        pass
 
-            if x == self.n-1 and y == self.n-1:
-                return wv
 
-            for dx, dy in delta:
-                nx = x + dx
-                ny = y + dy
-                if 0 <= nx < self.n and 0 <= ny < self.n:
-                    nwv = wv + arr[nx][ny]
-                    if nwv < visited[nx][ny]:
-                        visited[nx][ny] = nwv
-                        heapq.heappush(q, (nwv, nx, ny))
-
-    def result(self):
-        return self.route(self.arr)
 
 T = int(input())
+
 for tc in range(1, T+1):
-    n = int(input())
-    arr = [list(map(int, input())) for _ in range(n)]
-    solve = Recover(n, arr)
-    print(f'#{tc} {solve.result()}')
-
-
-
- 와 힙큐에 클래스에 이게  천재인가
+    N = int(input())
+    arr = [list(map(int, input().split())) for _ in range(N)]
+    solve = Dessert(N)
+    print(solve.start_position)

@@ -31,7 +31,8 @@ for tc in range(1, T + 1):
     shel = shelve(n, b, height)
     print(f'#{tc} {shel.min_diff}')
 
-# N-Queen
+# N-Queen ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 class Queen:
     def __init__(self, N):
         self.n = N
@@ -72,7 +73,8 @@ for tc in range(1, T+1):
     solve = Queen(N)
     print(f'#{tc} {solve.result}')
 
-# 최대 상금
+# 최대 상금 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 class Win:
     def __init__(self, num, change):
         self.num = num  # 주어지는 숫자 배열 리스트
@@ -148,4 +150,83 @@ for tc in range(1, T+1):
     solve = Recover(n, arr)
     print(f'#{tc} {solve.result()}')
 
+# 미생물 군집 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+class Virus:
+    def __init__(self, N, M, K, state):
+        self.N = N # 전체 판의 크기(N*N)
+        self.M = M # 격리 시간
+        self.K = K # 미생물 군집의 수(input에서 9줄)
+        self.remain_virus = 0
+        self.dx = [None, -1, 1, 0, 0] # 1~4로 받으니까 빈거 하나 앞에 줌
+        self.dy = [None, 0, 0, -1, 1]
+
+    def change_direction(self, direction):
+        # 주어진 인풋에서 상 = 1, 하 = 2 / 좌 = 3, 우 = 4 이므로 해당 순서대로. 바꿔줌
+        if direction == 1:
+            return 2
+        elif direction == 2:
+            return 1
+        elif direction == 3:
+            return 4
+        elif direction == 4:
+            return 3
+
+    def check(self, state):
+        dict = {}
+        result = deque([])
+
+        for _ in range(len(state)): # 같은 좌표인 애들의 값을 합치는 부분
+            x, y, head, direction = state.popleft()
+            key = (x, y)
+
+            # 3, 4개 군집이 모였을 때 세개를 다 비교해야 하는데 하나씩만 비교했음. dict value 안에 머릿수, 방향, 최대 머릿수를 넣음
+            if key in dict:
+                dict[key][0] += head
+                if dict[key][2] < head:
+                    dict[key][1] = direction
+                    dict[key][2] = head
+            else:
+                dict[key] = [head, direction, head]
+
+        for k in dict:
+            x, y = k
+            h = dict[k][0]
+            d = dict[k][1]
+            result.append((x, y, h, d))
+
+        return result
+
+    def after_time(self, state, time):
+        if time == self.M:
+            for b in state:
+                x, y, h, d = b
+                self.remain_virus += h
+            return
+
+        for _ in range(len(state)): # 미생물들이 1시간 뒤 본인의 방향으로 전진하고 일어나는 일을 하는 함수
+            x, y, head, direct = state.popleft()
+
+            nx = x + self.dx[direct]
+            ny = y + self.dy[direct]
+
+            if nx == 0 or ny == 0 or nx == self.N-1 or ny == self.N - 1:
+                head //= 2
+                direct = self.change_direction(direct)
+
+            ap = [nx, ny, head, direct]
+            state.append(ap)
+        self.after_time(self.check(state), time + 1)
+
+    def end(self):
+        return self.remain_virus
+
+T = int(input())
+
+for tc in range(1, T+1):
+    N, M, K = map(int, input().split())
+    state = deque([list(map(int, input().split())) for _ in range(K)])
+    solve = Virus(N, M, K, state)
+    solve.after_time(state, 0)
+    print(f'#{tc} {solve.end()}')
 
