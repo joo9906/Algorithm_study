@@ -230,3 +230,31 @@ for tc in range(1, T+1):
     solve.after_time(state, 0)
     print(f'#{tc} {solve.end()}')
 
+# 2819 - 격자판 숫자 이어붙이기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+def solve(arr):
+    result = set()
+    delta = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    q = deque([(i, j, str(arr[i][j])) for i in range(4) for j in range(4)])
+
+    while q:
+        x, y, word = q.popleft()
+
+        if len(word) == 7:
+            result.add(word)
+            continue
+
+        for dx, dy in delta:
+            nx, ny = x + dx, y + dy
+            if 0 <= nx < 4 and 0 <= ny < 4:
+                q.append((nx, ny, word + str(arr[nx][ny])))
+
+    return len(result)
+
+T = int(input())
+
+for tc in range(1, T+1):
+    arr = [list(map(int, input().split())) for _ in range(4)]
+    print(f'#{tc} {solve(arr)}')
+
+# 1861 - 정사각형 이어붙이기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
