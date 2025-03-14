@@ -110,7 +110,8 @@ for tc in range(1, T + 1):
     prize = Win(num, change)
     print(f'#{tc} {prize.max_result[0]}')
 
-# 보급로
+# 보급로 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
 class Recover:
     def __init__(self, n, arr):
         self.n = n
@@ -229,6 +230,90 @@ for tc in range(1, T+1):
     solve = Virus(N, M, K, state)
     solve.after_time(state, 0)
     print(f'#{tc} {solve.end()}')
+# 디저트 카페ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+# visited를 설정해서 방문한 곳은 다시 방문하지 않도록 설정
+# 대각선으로만 움직일 수 있으니 델타
+# 시간은 상관 없음. 시작점으로 돌아가면 되는 거니까 nx ny가 시작점이면 종료하도록 설정
+# 조건 1. 대각선으로 이동
+# 조건 2. 같은 숫자를 방문하면 안됨(시작점 제외)
+# 조건 3. 왔던 길 다시 돌아가면 안됨
+# 조건 4. 하나의 카페에서 디저트 먹으면 안된다(길이 1 안됨)
+
+import sys
+sys.stdin = open("input.txt", 'r')
+
+class Dessert:
+    def __init__(self, N, arr):
+        self.N = N
+        self.arr = arr
+        self.delta = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
+        self.result = -1 # 도착이 불가능하면 -1이 출력되어야 함
+        for i in range(N):
+            for j in range(N):
+                self.dfx(i, j, i, j, 0, {arr[i][j]})
+
+
+    def dfx(self, sx, sy, x, y, direction, save):
+        for i in range(direction, 4):
+            nx = x + self.delta[i][0]
+            ny = y + self.delta[i][1]
+
+            if nx == sx and ny == sy: # 출발점으로 돌아올 수 있으면 result랑 비교해서 더 큰 값을 결과로 저장
+                if len(save) > 2:
+                    self.result = max(self.result, len(save))
+                return
+
+            # 범위를 벗어나지 않고
+            if 0 <= nx < self.N and 0 <= ny < self.N and self.arr[nx][ny] not in save: # 갔던 곳도 아니라면
+                save.add(arr[nx][ny])
+                self.dfx(sx, sy, nx, ny, i, save) # 갔던 방향은 제외할거니까 방향에 i를  넣어줌
+                save.remove(arr[nx][ny]) # 갔던 방향을 범위에서 제거, 다른 방향으로 갈 수 있게 됨
+
+T = int(input())
+
+for tc in range(1, T+1):
+    N = int(input())
+    arr = [list(map(int, input().split())) for _ in range(N)]
+    solve = Dessert(N, arr)
+    print(f'#{tc} {solve.result}')
+
+# 디저트 카페 클래스 안 쓴 버전 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+def dessert(N, arr):
+    delta = [(1, 1), (1, -1), (-1, -1), (-1, 1)]  # 대각선 이동
+    result = -1  # 결과 저장
+
+    def dfs(sx, sy, x, y, direction, save):
+        nonlocal result
+        for i in range(direction, 4):
+            nx, ny = x + delta[i][0], y + delta[i][1]
+
+            if nx == sx and ny == sy:  # 출발점으로 돌아올 수 있으면 result랑 비교해서 더 큰 값을 결과로 저장
+                if len(save) > 2:
+                    result = max(result, len(save))
+                return
+
+            # 범위를 벗어나지 않고
+            if 0 <= nx < N and 0 <= ny < N and arr[nx][ny] not in save:  # 갔던 곳도 아니라면
+                save.add(arr[nx][ny])
+                dfs(sx, sy, nx, ny, i, save)  # 갔던 방향은 제외할거니까 방향에 i를  넣어줌
+                save.remove(arr[nx][ny])  # 갔던 방향을 범위에서 제거, 다른 방향으로 갈 수 있게 됨
+
+    # 모든 칸을 시작점으로 해서 DFS 호출
+    for i in range(N):
+        for j in range(N):
+            dfs(i, j, i, j, 0, {arr[i][j]})
+
+    return result
+
+T = int(input())
+
+for tc in range(1, T+1):
+    N = int(input())
+    arr = [list(map(int, input().split())) for _ in range(N)]
+    solve = dessert(N, arr)
+    print(f'#{tc} {solve}')
 
 # 2819 - 격자판 숫자 이어붙이기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
@@ -257,4 +342,40 @@ for tc in range(1, T+1):
     arr = [list(map(int, input().split())) for _ in range(4)]
     print(f'#{tc} {solve(arr)}')
 
-# 1861 - 정사각형 이어붙이기 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 1861 - 정사각형 방 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+delta = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+def solve(n, arr):
+    max_move = 0
+    start_num = float('inf')
+
+    for i in range(n):
+        for j in range(n):
+            q = deque([(i, j, arr[i][j], 1)])
+            visited = {(i, j)}
+            while q:
+                x, y, now, cnt = q.popleft()
+
+                for dx, dy in delta:
+                    nx = x + dx
+                    ny = y + dy
+                    if 0 <= nx < n and 0 <= ny < n and (nx, ny) not in visited and now + 1 == arr[nx][ny]:
+                        q.append((nx, ny, arr[nx][ny], cnt + 1))
+                        visited.add((nx, ny))
+
+            if cnt > max_move:
+                max_move = cnt
+                start_num = arr[i][j]
+            elif cnt == max_move:
+                start_num = min(start_num, arr[i][j])
+
+    return start_num, max_move
+
+
+T = int(input())
+
+for tc in range(1, T + 1):
+    n = int(input())
+    arr = [list(map(int, input().split())) for _ in range(n)]
+    start_num, max_move = solve(n, arr)
+    print(f'#{tc} {start_num} {max_move}')

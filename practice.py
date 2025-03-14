@@ -1,30 +1,26 @@
-from collections import deque
-import sys, heapq
+import sys
 sys.stdin = open('input.txt', 'r')
+input = sys.stdin.readline
+
+def solve(n, word):
+    if word.count('A') < n:
+        return 0
+
+    idx = []
+    result = 0
+
+    for i in range(len(word)): # A의 위치 찾기
+        if word[i] == 'A':
+            idx.append(i)
+
+    for i in range(len(idx) - n + 1):
+        a = idx[i+n-1] - idx[i]
+        result = max(result,a)
+
+    return result
 
 T = int(input())
-
-def solve(price, month):
-    min_price = price[3] # 최저 비용을 1년 이용권으로 설정
-
-    worst1 = 0
-    for i in month:
-        worst1 += price[0] * i
-    
-
-
-
-
-
-
-
-
-
-
-
-
-for tc in range(1, T+ 1):
-    price = [list(map(int, input().split()))]
-    month = [list(map(int, input().split()))]
-    solve(price, month)
-    print
+for tc in range(1, T + 1):
+    n = int(input())
+    word = input()
+    print(f'#{tc} {solve(n, word)}')
