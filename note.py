@@ -1,42 +1,41 @@
 import sys
-#sys.stdin = open('input.txt', 'r')
-input = sys.stdin.readline
+from collections import deque
+sys.stdin = open('input.txt', 'r')
 
-class Trie:
-    def __init__(self):
-        self.head = {}
+class inorder():
+    def __init__(self, n):
+        self.n = n
+        self.arr = [0] + [tuple(map(str, input().split())) for _ in range(n)]
+        self.tree = [0] * (n + 2)
     
-    def add(self, word):
-        cur = self.head
-
-        for ch in word:
-            if ch not in cur:
-                cur[ch] = {}
-            cur = cur[ch]
-        cur['end'] = True
-    
-    def search(self, word):
-        cur = self.head
-
-        for ch in word:
-            if ch not in cur:
-                return False
-            cur = cur[ch]
-
-        if 'end' in cur:
-            return True
+    def build(self, start, end, i = 1):
+        if start == end:
+            # self.arr[i][1]이 숫자인지 확인
+            if self.arr[i][1].isdigit():
+                return int(self.arr[i][1])
+            else:
+                raise ValueError("Invalid value in the array")
+        
+        mid = (start + end) // 2
+        
+        left = self.build(start, mid-1, i * 2)
+        op = self.arr[i][1]
+        right = self.build(mid + 1, end, i * 2 + 1)
+        
+        if op == '+':
+            return left + right
+        elif op == '-':
+            return left - right
+        elif op == '*':
+            return left * right
+        elif op == '/':
+            if right == 0:
+                raise ZeroDivisionError("Cannot divide by zero")
+            return left / right  # 부동소수점 나눗셈
         else:
-            return False
+            raise ValueError("Invalid operator")
 
-tree = Trie()
-n, m = map(int, input().split())
-cnt = 0
-
-for _ in range(n):
-    tree.add(input().strip())
-
-for _ in range(m):
-    if tree.search(input().strip()):
-        cnt += 1
-
-print(cnt)
+for i in range(1, 11):
+    n = int(input())
+    tree = inorder(n)
+    print(f'#{i} {tree.build(0, n-1)}')
