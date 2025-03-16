@@ -1,26 +1,28 @@
-import sys
+import sys, copy
 sys.stdin = open('input.txt', 'r')
-input = sys.stdin.readline
+#input = sys.stdin.readline
 
-def solve(n, word):
-    if word.count('A') < n:
-        return 0
+def find_max_distance(T):
+    for tc in range(1, T + 1):
+        K = int(input())
+        S = input()
 
-    idx = []
-    result = 0
+        A_positions = [i for i, c in enumerate(S) if c == 'A']
 
-    for i in range(len(word)): # A의 위치 찾기
-        if word[i] == 'A':
-            idx.append(i)
+        if len(A_positions) < K:
+            print(f"#{tc} 0")
+            continue
 
-    for i in range(len(idx) - n + 1):
-        a = idx[i+n-1] - idx[i]
-        result = max(result,a)
+        max_distance = 0
 
-    return result
+        for i in range(len(A_positions) - K + 1):
+            start = A_positions[i]
+            end = A_positions[i + K - 1]
+
+            distance = end - start
+            max_distance = max(max_distance, distance)
+
+        print(f"#{tc} {max_distance}")
 
 T = int(input())
-for tc in range(1, T + 1):
-    n = int(input())
-    word = input()
-    print(f'#{tc} {solve(n, word)}')
+find_max_distance(T)

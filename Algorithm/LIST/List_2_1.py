@@ -110,7 +110,7 @@ for i in range(10):
     T = int(input())
     arr = []
     for k in range(100):
-        num = list(map(int, input().split()))
+        i = list(map(int, input().split()))
         arr.append(num)
     print(f'#{T} {find_max(arr)}')
 # --------------------------------------------------------------------------------

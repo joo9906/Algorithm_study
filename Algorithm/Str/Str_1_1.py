@@ -16,8 +16,8 @@ def sorting(test_case):
     return final
 
 for u in range(1, T+1):
-    nums = list(map(str, input().split()))
-    N = int(nums[1])
+    is = list(map(str, input().split()))
+    N = int(is[1])
     test_case = list(map(str, input().split()))
     print(f'#{u}')
     print(*sorting(test_case))
