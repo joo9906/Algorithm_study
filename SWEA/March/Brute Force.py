@@ -379,3 +379,37 @@ for tc in range(1, T + 1):
     arr = [list(map(int, input().split())) for _ in range(n)]
     start_num, max_move = solve(n, arr)
     print(f'#{tc} {start_num} {max_move}')
+
+# 동철이의 일 분배 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+class Dong:
+    def __init__(self, n, arr):
+        self.n = n
+        self.arr = arr
+        self.result = 0
+        self.visited = [False] * n
+        self.build(0, 1)  # 시작
+
+    def build(self, depth, now):
+        if now <= self.result:
+            return
+
+        # 모든 행에서 하나씩 선택했으면 최댓값 갱신
+        if depth == self.n:
+            self.result = max(self.result, now)
+            return
+
+        for i in range(self.n):
+            if not self.visited[i]:  # 방문 안 했으면 선택
+                self.visited[i] = True
+                self.build(depth + 1, now * (self.arr[depth][i] * 0.01))
+                self.visited[i] = False  # 백트래킹
+
+T = int(input())
+for tc in range(1, T + 1):
+    n = int(input())
+    arr = [list(map(int, input().split())) for _ in range(n)]
+    solve = Dong(n, arr)
+    print(f'#{tc} {solve.result * 100:.6f}')
+
+

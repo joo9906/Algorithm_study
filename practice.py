@@ -1,28 +1,49 @@
-import sys, copy
-sys.stdin = open('input.txt', 'r')
-#input = sys.stdin.readline
+import sys, heapq, copy
+from collections import deque
+#sys.stdin = open('input.txt', 'r')
+input = sys.stdin.readline
 
-def find_max_distance(T):
-    for tc in range(1, T + 1):
-        K = int(input())
-        S = input()
+class Answer:
+    def __init__(self, n ,arr, target):
+        self.n = n
+        self.arr = arr
+        self.tree = {i:[] for i in range(self.n)}
+        self.build()
+        self.remove(target)
+        self.cnt = 0
+        self.recur(0)
 
-        A_positions = [i for i, c in enumerate(S) if c == 'A']
+    def build(self):
+        for k in range(self.n):
+            if arr[k] == -1:
+                continue
+            self.tree[self.arr[k]].append(k)
 
-        if len(A_positions) < K:
-            print(f"#{tc} 0")
-            continue
+    def remove(self, target):
+        if target in self.tree:
+            del self.tree[target]
 
-        max_distance = 0
+        for p in self.tree:
+            if target in self.tree[p]:
+                self.tree[p].remove(target)
 
-        for i in range(len(A_positions) - K + 1):
-            start = A_positions[i]
-            end = A_positions[i + K - 1]
+    def recur(self, node):
+        if 0 not in self.tree.keys():
+            return
 
-            distance = end - start
-            max_distance = max(max_distance, distance)
+        if not self.tree[node]:
+            self.cnt += 1
+            return
 
-        print(f"#{tc} {max_distance}")
+        for ch in self.tree[node]:
+            self.recur(ch)
 
-T = int(input())
-find_max_distance(T)
+    def result(self):
+        return self.cnt
+
+n = int(input().strip())
+arr = list(map(int, input().strip().split()))
+target = int(input().strip())
+
+solve = Answer(n, arr, target)
+print(solve.cnt)

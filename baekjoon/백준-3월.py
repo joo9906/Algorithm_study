@@ -206,3 +206,38 @@ T = int(input())
 for i in range(T):
     S = list(map(str, input().strip()))
     ispalindrome(S)
+
+# 2491 수얼 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+def bigfind(n, arr):
+    result1 = 0
+    result2 = 0
+
+    for k in range(n):
+        if n - k < result1:
+            break
+        i = k
+        cnt = 1
+        while i + 1 < n and arr[i] <= arr[i + 1]:  # 증가
+            cnt += 1
+            i += 1
+
+        result1 = max(result1, cnt)
+
+    for j in range(n):
+        if n - j < result2:
+            break
+        num = j
+        cnt = 1
+        while num + 1 < n and arr[num] >= arr[num + 1]:  # 감소
+            cnt += 1
+            num += 1
+
+        result2 = max(result2, cnt)
+
+    return max(result1, result2)
+
+
+n = int(input().strip())
+arr = list(map(int, input().strip().split()))
+print(bigfind(n, arr))
