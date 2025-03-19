@@ -104,7 +104,8 @@ def func():
 
 func()
 
-# 외계인의 손가락
+# ----------------------------------------------------------------------ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 2841 외계인의 손가락
 
 import sys
 input = sys.stdin.readline
@@ -129,3 +130,69 @@ def solve(arr):
 n, p = map(int, input().split())
 arr = [tuple(map(int, input().strip().split())) for _ in range(n)]
 print(solve(arr))
+
+# ----------------------------------------------------------------------ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 3986 좋은 단어
+
+def solve(arr):
+    stack = []
+
+    for i in arr:
+        if not stack:
+            stack.append(i)
+            continue
+
+        if stack[-1] == i:
+            stack.pop()
+            continue
+
+        stack.append(i)
+
+    if not stack:
+        return True
+
+    return False
+
+
+
+n = int(input())
+cnt = 0
+for i in range(n):
+    arr = list(map(str, input().strip()))
+    if solve(arr):
+        cnt += 1
+
+print(cnt)
+
+# ----------------------------------------------------------------------ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 5397 키로거
+
+def solve(arr):
+    stack = []
+    save = []
+
+    i = 0
+    for i in arr:
+        if i == '-':
+            if stack:
+                stack.pop()
+        elif i == '<':
+            if stack:
+                save.append(stack.pop())
+        elif i == '>':
+            if save:
+                stack.append(save.pop())
+        else:
+            stack.append(i)
+
+    if save:
+        stack.extend(reversed(save))
+
+    return ''.join(stack)
+
+
+T = int(input())
+for _ in range(T):
+    arr = list(map(str, input()))
+    print(solve(arr))
+

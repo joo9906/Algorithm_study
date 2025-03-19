@@ -8,28 +8,9 @@ from collections import deque
 import sys
 sys.stdin = open("input.txt", 'r')
 
-class Dessert:
-    def __init__(self, N):
-        self.N = N
-        self.delta = [(1, 1), (1, -1), (-1, -1), (-1, 1)] # 길이 대각선만 가능하므로 5시, 7시, 11시, 1시
-        self.result = 0
-        self.visited = [[False] * self.N for _ in range(N)]
-        self.start_position = deque([(i, j) for i in range(N) for j in range(N)])
-
-    def middle(self, start):
-        while start:
-            x, y = start.popleft()
+'''
+크기가 다른 집합을 병합할 때 작은 쪽 대표자만 교체를 하면 큰 쪽의 대표자로 바로 참조가 가능하니까 
+재귀로 파고들어가는것보다 효율이 낫나? 오히려 find할때마다 떨어지는건가? 
 
 
-    def tour(self, arr):
-        pass
-
-
-
-T = int(input())
-
-for tc in range(1, T+1):
-    N = int(input())
-    arr = [list(map(int, input().split())) for _ in range(N)]
-    solve = Dessert(N)
-    print(solve.start_position)
+'''
