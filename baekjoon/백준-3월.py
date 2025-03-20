@@ -241,3 +241,106 @@ def bigfind(n, arr):
 n = int(input().strip())
 arr = list(map(int, input().strip().split()))
 print(bigfind(n, arr))
+
+# 1976 여행가자 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+class Unionfind:
+    def __init__(self):
+        self.n = int(input())
+        self.m = int(input())
+        self.arr = [list(map(int, input().split())) for _ in range(self.n)] # 인접행렬임
+        self.city = list(map(lambda x: int(x) - 1, input().split())) # 도시 어디로 갈지
+        self.parents = [i for i in range(self.n)]
+        self.union_cities()
+        self.result = self.isconnect()
+
+    def find(self, x):
+        if self.parents[x] == x: # 본인과 대표자가 같으면 그대로 반환
+            return x
+
+        self.parents[x] = self.find(self.parents[x])
+        return self.parents[x] # 대표자 반환
+
+    def union(self, x, y):
+        rootX = self.find(x)
+        rootY = self.find(y)
+
+        # 집합 대 집합에서 대표자의 숫자가 더 작은 쪽으로 대표자를 변경
+        if rootX < rootY:
+            self.parents[rootY] = rootX
+        else:
+            self.parents[rootX] = rootY
+
+    def union_cities(self):
+        for i in range(self.n):
+            for j in range(self.n):
+                if self.arr[i][j] == 1:
+                    self.union(i, j)
+
+    def isconnect(self):
+        front = self.find(self.city[0])
+
+        for k in self.city[1:]:
+            next = self.find(k)
+            if front != next:
+                return 'NO'
+            front = next
+        return 'YES'
+
+solve = Unionfind()
+print(solve.result)
+
+# 1717 집합의 표현 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 이거 sys input 이랑 재귀 깊이 안풀어주면 재귀 오류 / 시간 초과 뜸, pypy는 메모리 터짐
+
+import sys
+#from collections import deque
+#sys.stdin = open('input.txt', 'r')
+input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
+
+class Unionfind:
+    def __init__(self, n, m):
+        self.n = n
+        self.m = m
+        self.arr = [list(map(int, input().strip().split())) for _ in range(m)]
+        self.parents = [i for i in range(n+1)]
+
+    def find(self, x):
+        if self.parents[x] == x: # 본인과 대표자가 같으면 그대로 반환
+            return x
+
+        self.parents[x] = self.find(self.parents[x]) # 본인의 대표자를 현재 그룹의 대표자로 변경
+
+        return self.parents[x] # 대표자 반환
+
+    def union(self, x, y):
+        rootX = self.find(x)
+        rootY = self.find(y)
+
+        # 집합 대 집합에서 대표자의 숫자가 더 작은 쪽으로 대표자를 변경
+        if rootX < rootY:
+            self.parents[rootY] = rootX
+        else:
+            self.parents[rootX] = rootY
+
+    def result(self):
+        res = []
+        for state, a, b in self.arr:
+            if state == 0:
+                self.union(a, b)
+
+            elif state == 1:
+                i = self.find(a)
+                j = self.find(b)
+                if i == j:
+                    res.append('YES')
+                else:
+                    res.append('NO')
+        return res
+
+n, m = map(int, input().strip().split())
+ans = Unionfind(n, m)
+k = ans.result()
+for l in k:
+    print(l)
