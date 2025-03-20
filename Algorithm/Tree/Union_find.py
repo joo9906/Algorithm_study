@@ -77,3 +77,5 @@ def Union(x, y):
     else:
         parents[ref_y] = ref_x  # 크기가 같으면 그냥 아무거나의 대표자로 병합함
         ranks[ref_x] += 1
+
+
