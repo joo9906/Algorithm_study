@@ -1,40 +1,46 @@
-def merge(left, right): # 병합 부분
-    result = [0] * (len(left) + len(right))
-    l = r = 0
+import sys
+sys.stdin = open('input.txt', 'r')
+input = sys.stdin.readline
 
-    while l < len(left) and r < len(right):
-        if left[l] < right[r]:
-            result[l+r] = left[l]
-            l += 1
+class Unionfind:
+    def __init__(self, n, arr):
+        self.n = n
+        self.arr = [[] for _ in range(n+1)]
+        self.island = [i for i in range(n+1)]
+        self.parents = [i for i in range(n+1)]
+        for a, b in arr:
+            self.arr[a].append(b)
+            self.arr[b].append(a)
+            self.union(a, b)
+        self.result()
+
+
+    def find(self, x):
+        if x == self.parents[x]:
+            return x
+
+        self.parents[x] = self.find(self.parents[x])
+        return self.parents[x]
+
+    def union(self, x, y):
+        rootx = self.find(x)
+        rooty = self.find(y)
+
+        if rootx < rooty:
+            self.parents[rooty] = rootx
         else:
-            result[l+r] = right[r]
-            r += 1
+            self.parents[rootx] = rooty # else 부분 까먹지 말기
 
-    while l < len(left):
-        result[l+r] = left[l]
-        l += 1
-
-    while r < len(right):
-        result[l+r] = right[r]
-        r += 1
-
-    return result
-
-def merge_sort(arr): # 찢는 부분
-    if len(arr) == 1:
-        return arr
-
-    mid = len(arr)//2
-    left = arr[:mid]
-    right = arr[mid:]
-
-    left_list = merge_sort(left)
-    right_list = merge_sort(right)
-
-    merged_list = merge(left_list, right_list)
-
-    return merged_list
+    def result(self):
+        for i in range(2, self.n+1):
+            if self.find(1) != self.find(i): #여기에서 i의 대표자를 계속 찾았어야 함
+                print(1, i)
+                return
 
 
-arr = [69, 10, 30, 2, 16, 8, 31, 22]
-sorted_arr = merge_sort(arr)
+n = int(input().strip())
+arr = [list(map(int, input().strip().split())) for _ in range(n-2)]
+if n == 2:
+    print(1, 2)
+else:
+    solve = Unionfind(n, arr)
