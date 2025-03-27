@@ -1,0 +1,3 @@
+fitler랑 get 차이 외우기
+
+특정 조건을 만족하는 queryset api 6글자짜리가 뭐지
