@@ -1,46 +1,29 @@
-import sys
+import sys, heapq
 sys.stdin = open('input.txt', 'r')
-input = sys.stdin.readline
+#input = sys.stdin.readline
+sys.setrecursionlimit(10**6)
 
-class Unionfind:
-    def __init__(self, n, arr):
-        self.n = n
-        self.arr = [[] for _ in range(n+1)]
-        self.island = [i for i in range(n+1)]
-        self.parents = [i for i in range(n+1)]
-        for a, b in arr:
-            self.arr[a].append(b)
-            self.arr[b].append(a)
-            self.union(a, b)
-        self.result()
+def solve(n, idx):
+    global result, height
 
+    if n >= result:
+        return
 
-    def find(self, x):
-        if x == self.parents[x]:
-            return x
+    if n >= b:
+        result = min(n, result)
+        return
 
-        self.parents[x] = self.find(self.parents[x])
-        return self.parents[x]
+    for i in range(idx, len(height)):
+        if not visited[i]:
+            visited[i] = True
+            solve(n+height[i], i)
+            visited[i] = False
 
-    def union(self, x, y):
-        rootx = self.find(x)
-        rooty = self.find(y)
-
-        if rootx < rooty:
-            self.parents[rooty] = rootx
-        else:
-            self.parents[rootx] = rooty # else 부분 까먹지 말기
-
-    def result(self):
-        for i in range(2, self.n+1):
-            if self.find(1) != self.find(i): #여기에서 i의 대표자를 계속 찾았어야 함
-                print(1, i)
-                return
-
-
-n = int(input().strip())
-arr = [list(map(int, input().strip().split())) for _ in range(n-2)]
-if n == 2:
-    print(1, 2)
-else:
-    solve = Unionfind(n, arr)
+T = int(input())
+for tc in range(1, T+1):
+    n, b = map(int, input().split())
+    height = list(map(int, input().split()))
+    visited = [False] * n
+    result=float('inf')
+    solve(0, 0)
+    print(f'#{tc} {result - b}')
