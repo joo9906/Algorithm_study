@@ -21,9 +21,7 @@ def solve(n, idx):
 
 T = int(input())
 for tc in range(1, T+1):
-    n, b = map(int, input().split())
-    height = list(map(int, input().split()))
-    visited = [False] * n
-    result=float('inf')
-    solve(0, 0)
-    print(f'#{tc} {result - b}')
+    num, change = map(str, input().split())
+    num = list(num)
+    change = int(change)
+    print(num)
