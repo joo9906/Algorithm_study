@@ -393,3 +393,47 @@ if n == 2:
     print(1, 2)
 else:
     solve = Unionfind(n, arr)
+
+# ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 1922 - 네트워크 연결
+class Train:
+    def __init__(self, n, m, data):
+        self.n = n
+        self.m = m
+        self.parents = [0] + [i for i in range(1, n+1)]
+        self.computer = sorted(data, key=lambda x: (x[2], x[1]))
+
+    def find(self, x):
+        if x == self.parents[x]:
+            return x
+
+        self.parents[x] = self.find(self.parents[x])
+        return self.parents[x]
+
+    def union(self, x, y):
+        rx = self.find(x)
+        ry = self.find(y)
+
+        if rx < ry:
+            self.parents[ry] = rx
+        else:
+            self.parents[rx] = ry
+
+    def kruskal(self):
+        cnt = 0
+        result = 0
+
+        for start, end, weight in self.computer:
+            if self.find(start) != self.find(end):
+                self.union(start, end)
+                cnt += 1
+                result += weight
+
+                if cnt == self.n-1:
+                    return result
+
+n= int(input().strip())
+m = int(input().strip())
+data = [tuple(map(int, input().strip().split())) for _ in range(m)]
+solve = Train(n, m, data)
+print(solve.kruskal())

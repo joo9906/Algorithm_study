@@ -1,121 +1,258 @@
-# 스위치 켜고 끄기
-def turn(arr, n): # 해당 스위치의 상태를 바꾸는 함수
-    if arr[n] == 0:
-        arr[n] = 1
-    elif arr[n] == 1:
-        arr[n] = 0
 
-def boy(arr, num, n): # 남자일 때 적용
-    for i in range(num-1, len(arr), num): # 받은 위치의 배수번째 위치의 스위치를 turn 함
-        turn(arr, i)
+# 백준 1931 회의실 배정 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 그리디 써서 푸는건데 어떤게 나올 지 가늠이 안됨.
+def solve(n, time):
+    time.sort(key=lambda x : (x[1], x[0]))
+    result = [time[0]]
 
-def girl(arr, num, find): # 여자일 때 적용
-    if num - find < 0 or num + find >= len(arr) or arr[num - find] != arr[num + find]:
-        return turn(arr, num)
-    elif arr[num-find] == arr[num+find]:
-        turn(arr, num-find)
-        turn(arr, num+find)
-        girl(arr, num, find+1)
+    i = 1
+    k = 0
+    while i < n:
+        start, end = time[i]
 
-def off(): # input 값들을 받고 실행한 뒤 출력까지 하는 함수
-    n = int(input())
-    arr = list(map(int, input().split()))
-    head = int(input())
-    people = [list(map(int, input().split())) for _ in range(head)]
+        # 시작 시간이 이전 회의시간의 끝나는 시간과 같거나 큰 경우 회의 진행 가능
+        if start >= result[k][1]:
+            result.append((start, end))
+            k += 1
 
-    for x, y in people: #남/여 받은대로 실행
-        if x == 1:
-            boy(arr, y, n)
-        elif x == 2:
-            girl(arr, y-1, 1)
+        i+=1
+
+    return len(result)
+
+
+n = int(input().strip())
+time = [tuple(map(int, input().strip().split())) for _ in range(n)]
+cnt = 0
+print(solve(n, time))
+
+# MST ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 최소 스패닝 트리 - SWEA
+
+# prim 버전
+class Prim:
+    def __init__(self, V, E, data, adj):
+        self.V = V
+        self.E = E
+        self.data = data
+        self.adj = adj
+
+    def solve(self, start_node):
+        MST = [False] * (self.V+1) # 방문을 했다고 넣을 것
+        q = [(0, start_node)] # 맨 처음 뽑을 대상의 가중치는 0, 시작 노드
+        min_weight = 0
+
+        while q:
+            weight, node = heapq.heappop(q)
+
+            if MST[node]: # 뽑아다가 쓴 적 있는 간선이라면 지나감
+                continue
+
+            MST[node] = True
+            min_weight += weight # 간선의 최소 가중치에 더함 - 여기에서 더하는 이유는 최소 가중치 간선을 뽑아온거기 때문
+
+            for i in range(node, self.V + 1):
+                if self.adj[node][i] == float('inf'):
+                    continue
+
+                if MST[i]:
+                    continue
+
+                # 인접 행렬에서 의미가 있는 자료인 경우에만 아래를 실행
+                new_w = self.adj[node][i]
+                heapq.heappush(q, (new_w, i))
+
+        return min_weight
+
+
+T = int(input())
+for tc in range(1, T+1):
+    V, E = map(int, input().split())
+    data = [tuple(map(int, input().split())) for _ in range(E)]
+    adj = [[] for _ in range(V + 1)]
+    for node, target, w in data:
+        adj[node][target] = w
+        adj[target][node] = w
+
+    ans = Prim(V, E, data, adj)
+    print(f'#{tc} {ans.solve(1)}')
+
+# 크루스칼 버전
+def find(x):
+    global parents
+
+    if x == parents[x]:
+        return x
+
+    parents[x] = find(parents[x])
+    return parents[x]
+
+
+def union(x, y):
+    global parents
+
+    rx = find(x)
+    ry = find(y)
+
+    if rx < ry:
+        parents[ry] = rx
+    else:
+        parents[rx] = ry
+
+
+T = int(input())
+for tc in range(1, T + 1):
+    V, E = map(int, input().split())
+    data = [tuple(map(int, input().split())) for _ in range(E)]
+    data.sort(key=lambda x: x[2])
+    parents = [i for i in range(V + 1)]  # 노드가 1번부터 시작하니까 0번째는 버릴거임
 
     cnt = 0
-    for i in arr:
-        print(i, end=' ')
-        cnt += 1
-        if cnt == 20:
-            print()
-            cnt = 0
+    min_weight = 0
 
-off()
+    for k in data:
+        start, target, weight = k
+        if find(start) != find(target):  # 둘이 연결이 되어있지 않은 상태일 때 실행
+            union(start, target)
+            cnt += 1
+            min_weight += weight
 
-# -------------------------------------------------------------------------
+        if cnt == V - 1:
+            break
 
-# 나이트의 이동 - 월말 형식(덱 못쓴다고 해서 만든거)
-T = int(input())
+    print(f'#{tc} {min_weight}')
 
-def chess():
-    I = int(input())
-    arr = [[0] * I for _ in range(I)] # 체스판 생성
-    start_x, start_y = map(int, input().split())  # 나이트가 시작하는 좌표
-    target_x, target_y = map(int, input().split()) # 도달해야 할 좌표
-    
-    # 시작점과 목표점이 같으면 바로 중단
-    if start_x == target_x and start_y == target_y: 
-        return 0
-    
-    # 나이트가 이동할 수 있는 칸의 델타 - 순서대로 1시 2시 4시 5시 7시 8시 10시 11시 방향
-    delta = [[-2, 1], [-1, 2], [1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1]]
-    
-    q = [(start_x, start_y, 0)] #현재 x좌표와 y좌표, 움직인 횟수 / 이후에는 움직인 좌표들이 들어갈거임
-    
-    # 타겟과 시작점이 같은 경우 꼬이면 안되니까 타겟을 시작점보다 나중에 지정해줘야 함
-    arr[start_x][start_y] = 1 # 시작점의 좌표를 1로 바꾸고 시작(방문 했다는 표시)
-    arr[target_x][target_y] = 2  # 나이트가 도착하려는 좌표를 2로 설정
-    
-    
-    
-    while q: # q에 저장하는 값이 있는동안 계속 반복(없으면 못 가는 것이므로 중단)
-        now_x, now_y, cnt = q.pop(0) # x, y 좌표들을 받고 cnt는 움직인 횟수 / 가장 왼쪽을 뽑아야 함
+# MST - 백준 네트워크 연결(1922) ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+# 이거 인접 리스트로 안받으면 터질 수 있음
+# 프림이 더 유리한 경우는 노드의 개수가 충분히 많고 간선이 노드의 2배를 넘어갈 때
 
-        for x, y in delta: # 델타를 순회하며 나이트가 움직일 수 있는 좌표를 탐색
-            nx = now_x + x # 다음 x좌표
-            ny = now_y + y # 다음 y좌표
-            
-            
-            
-            # 체스판을 벗어나지 않고 다음 좌표가 방문한 곳도 아니라면 실행
-            if 0 <= nx < I and 0 <= ny < I and arr[nx][ny] != 1:
-                if arr[nx][ny] == 2: # 다음 좌표가 목적지라면 cnt에 1 더하고 끝
-                    return cnt + 1
-            
-                q.append((nx, ny, cnt + 1)) # 좌표 저장소에 다음 좌표를 저장
-                arr[nx][ny] = 1 # 다음 좌표를 방문했다고 표시 함
-    
-    return 'Fail'
-         
-for k in range(T):
-    print(chess())
-    
-# --------------------------------------
-# 미로 탐색
+# 프림 버전
+class Prim:
+    def __init__(self, n, m):
+        self.n = n  # 노드의 개수
+        self.m = m  # 간선의 개수
 
-def maze():
-    ty, tx = map(int, input().split())
-    arr = [list(map(int, input())) for _ in range(ty)]
-    delta = [(1, 0), (0, 1), (-1, 0), (0, -1)] #시계방향 델타
-    arr[0][0] = 0 # 첫 좌표 방문처리
-    
-    q = [(0, 0, 1)] # 첫 좌표도 1회로 쳐서 시작
-    
-    while q: # q에 값이 있는동안 계속 반복
-        nowy, nowx, cnt = q.pop(0) # q의 왼쪽 끝을 꺼내서 현재의 y, x좌표, 움직인 횟수를 뽑아옴
+    def solve(self, graph):
+        # 최소 힙을 이용해서 Prim 알고리즘
+        MST = [False] * (self.n + 1)  # 방문 여부 배열
+        min_weight = 0  # 최소 가중치 합
 
-        if nowy == ty-1 and nowx == tx-1: # 현재의 y좌표, x좌표가 목표점과 같으면 cnt 뱉음
-            return cnt
-        
-        for dy, dx in delta: # 델타를 돌면서 dy와 dx 값을 받음
-            nx = nowx + dx # 다음 x좌표는 nowx + dx
-            ny = nowy + dy # 다음 y 좌표는 nowy + dy
+        # (가중치, 노드 번호)
+        q = [(0, 1)]  # 시작 노드는 1로 설정
+        while q:
+            weight, node = heapq.heappop(q)
 
-            # 미로 내에 있고 다음 좌표가 1일 때
-            if 0 <= ny < ty and 0 <= nx < tx and arr[ny][nx] == 1:
-                q.append((ny, nx, cnt + 1)) # 다음 y좌표, 다음 x좌표, 이동 횟수에는 1 추가
-                
-                # 여기서 먼저 0 처리를 해줘야 for문을 돌면서 불필요한 좌표를 변경하지 않음
-                arr[ny][nx] = 0 
-print(maze()
+            if MST[node]:  # 이미 MST에 포함된 노드라면 넘어감
+                continue
 
-# SWEA 회의실 스케쥴링 쿼리, 스패닝 트리
-# 백준 회의실 배정(1931), 네트워크연결(1922)
-# 트리 쪽은 크루스칼 알고리즘 이라고 햇음? PRIM일지도
+            min_weight += weight  # 해당 노드를 MST에 포함시킨다.
+            MST[node] = True
+
+            # 인접한 노드들 탐색
+            for nw, nn in graph[node]:
+                if not MST[nn]:  # 이미 포함된 노드는 제외
+                    heapq.heappush(q, (nw, nn))
+
+        return min_weight
+
+
+# 입력 처리
+n = int(input().strip())
+m = int(input().strip())
+data = [tuple(map(int, input().strip().split())) for _ in range(m)]
+
+# 그래프 초기화 (인접 리스트 형태)
+graph = [[] for _ in range(n + 1)]
+for start, end, weight in data:
+    graph[start].append((weight, end))
+    graph[end].append((weight, start))  # 양방향 그래프
+
+# Prim 알고리즘 실행
+ans = Prim(n, m)
+print(ans.solve(graph))
+
+# ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+# 크루스칼 버전
+class Train:
+    def __init__(self, n, m, data):
+        self.n = n
+        self.m = m
+        self.parents = [0] + [i for i in range(1, n+1)]
+        self.computer = sorted(data, key=lambda x: (x[2], x[1]))
+
+    def find(self, x):
+        if x == self.parents[x]:
+            return x
+
+        self.parents[x] = self.find(self.parents[x])
+        return self.parents[x]
+
+    def union(self, x, y):
+        rx = self.find(x)
+        ry = self.find(y)
+
+        if rx < ry:
+            self.parents[ry] = rx
+        else:
+            self.parents[rx] = ry
+
+    def kruskal(self):
+        cnt = 0
+        result = 0
+
+        for start, end, weight in self.computer:
+            if self.find(start) != self.find(end):
+                self.union(start, end)
+                cnt += 1
+                result += weight
+
+                if cnt == self.n-1:
+                    return result
+
+n= int(input().strip())
+m = int(input().strip())
+data = [tuple(map(int, input().strip().split())) for _ in range(m)]
+solve = Train(n, m, data)
+print(solve.kruskal())
+
+# ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+
+'''
+다익스트라
+최단경로를 구하는 문제에서 사용되는 알고리즘
+하나의 정점에서 끝 정점까지의 최단 경로
+prim 알고리즘과 비슷하지만 다익스트라는 가중치를 누적 시키며 최단 거리를 찾음.
+prim은 단순히 각 간선들 중 최소 가중치인 간선을 선택하는 것
+
+따라서 prim이나 kruskal은 모든 노드를 연결시킨다는 MST(최소 신장 트리)이지만 
+다익스트라는 최단 거리만을 찾는 것이기 때문에 모든 노드를 연결하지 않음. Dijkstar != MST
+
+다익스트라는 음의 가중치를 사용하지 못함.
+이유는 하나의 노드에서 가장 가중치가 낮은 간선을 선택하는데
+1-3으로 가는 간선의 가중치가 10, 1-2 가중치 15 1-3 가중치 -10 일 경우 1-2-3의 누적
+가중치가 더 작은데 1-3 간선으로 이미 확정시켜서 1-2-3을 써먹지를 못함.
+즉 음수와 양수가 섞이면 이거 판단을 못함
+이를 해결하기 위해서는 벨만-포드 알고리즘을 써야 한다.
+
+다만 다익스트라와 벨만 포드는 처음 노드에서 끝 노드까지의 최단거리를 구하는 방법이고
+모든 정점의 최단 거리를 구하는건 플로이드-마샬 알고리즘임
+
+
+
+신장 트리
+1. 노드의 개수가 n이고 간선의 개수가 n-1인 트리
+2. 모든 노드가 서로 양방향으로 연결 되어 있음
+3. 간선의 개수가 n-1이므로 사이클이 없음이 보장된 트리
+4. 하나의 그래프에서 여러 개의 트리가 나올 수 있음
++ 간선의 가중치가 가장 작은 것들로 이루어진 게 최소신장트리(MST)
+
+Prim 알고리즘과 Kruskal 
+간선의 개수가 많아질수록 Prim 알고리즘이 효율적임
+-> kruskal은 정렬을 해야 사용 가능하기 때문
+kruskal은 union find의 방법을 사용해서 노드끼리 연결되어 있는지 확인하며 최소가중치만 고름
+정렬이 되어 있기 때문에 노드를 순서대로 확인하지 않고 무조건 최소 간선만 확인해서 연결
+
+prim은 인접행렬/리스트에 정보를 저장하고 우선순위큐를 활용해서 품(visit도 사용)
+노드 하나를 보고 거기서 가장 가중치가 낮은 애만 선택하는 과정 반복
+
+'''

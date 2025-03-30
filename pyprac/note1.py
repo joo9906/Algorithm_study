@@ -1,27 +1,48 @@
-import sys, heapq
+import heapq
+import sys
 sys.stdin = open('input.txt', 'r')
-#input = sys.stdin.readline
-sys.setrecursionlimit(10**6)
+from collections import deque
+input = sys.stdin.readline
 
-def solve(n, idx):
-    global result, height
+class Prim:
+    def __init__(self, n, m):
+        self.n = n # 노드의 개수
+        self.m = m # 간선의 개수
 
-    if n >= result:
-        return
+    def solve(self, graph):
+        MST = [False] * (self.n+1)
+        q = [(0, 1)]
+        min_weight = 0
 
-    if n >= b:
-        result = min(n, result)
-        return
+        while q:
+            weight, node = heapq.heappop(q)
 
-    for i in range(idx, len(height)):
-        if not visited[i]:
-            visited[i] = True
-            solve(n+height[i], i)
-            visited[i] = False
+            if MST[node]:
+                continue
 
-T = int(input())
-for tc in range(1, T+1):
-    num, change = map(str, input().split())
-    num = list(num)
-    change = int(change)
-    print(num)
+            min_weight += weight
+            MST[node] = True
+
+            for i in graph[node]:
+                nw, nn = i
+                if MST[nn]:
+                    continue
+
+                heapq.heappush(q, (nw, nn))
+
+        return min_weight
+
+
+n = int(input().strip())
+m = int(input().strip())
+data = [tuple(map(int, input().strip().split())) for _ in range(m)]
+graph = [[] for _ in range(n+1)]
+
+for start, end, weight in data: # 양방향 그래프로 만들어 줌
+    graph[start].append((weight, end))
+    graph[end].append((weight, start))
+
+ans = Prim(n, m)
+print(ans.solve(graph))
+
+
