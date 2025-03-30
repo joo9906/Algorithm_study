@@ -1,12 +1,10 @@
 {
-    "python.terminal.executeInFileDir": true,
-    "python.terminal.launchArgs": [
-        "-u"
-    ],
-    "code-runner.executorMap": {
-        "python": "python -u $fullFileName < input.in"
-    },
-     // Django
+  "python.terminal.executeInFileDir": true,
+  "python.terminal.launchArgs": ["-u"],
+  "code-runner.executorMap": {
+    "python": "python -u $fullFileName < input.in"
+  },
+  // Django
   "files.associations": {
     "**/*.html": "html",
 	  "**/templates/**/*.html": "django-html",
