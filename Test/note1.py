@@ -1,48 +1,42 @@
-import heapq
 import sys
-sys.stdin = open('input.txt', 'r')
 from collections import deque
 input = sys.stdin.readline
 
-class Prim:
-    def __init__(self, n, m):
-        self.n = n # 노드의 개수
-        self.m = m # 간선의 개수
+r, c = map(int, input().strip().split())
+arr = [list(input().strip()) for _ in range(r)]
 
-    def solve(self, graph):
-        MST = [False] * (self.n+1)
-        q = [(0, 1)]
-        min_weight = 0
+dx = [0, 0, 1, -1]
+dy = [1, -1, 0, 0]
 
-        while q:
-            weight, node = heapq.heappop(q)
+def bfs():
+    q = deque()
+    start_char = arr[0][0]
+    q.append((0, 0, set([start_char]), 1))
 
-            if MST[node]:
-                continue
+    max_count = 1
+    visited = set()
+    visited.add((0, 0, start_char))
 
-            min_weight += weight
-            MST[node] = True
+    while q:
+        x, y, used, count = q.popleft()
+        max_count = max(max_count, count)
 
-            for i in graph[node]:
-                nw, nn = i
-                if MST[nn]:
-                    continue
+        for i in range(4):
+            nx = x + dx[i]
+            ny = y + dy[i]
 
-                heapq.heappush(q, (nw, nn))
+            if 0 <= nx < r and 0 <= ny < c:
+                char = arr[nx][ny]
+                if char not in used:
+                    new_used = used.copy()
+                    new_used.add(char)
 
-        return min_weight
+                    # visited 상태를 (좌표, 지금까지 사용한 알파벳 문자열) 로 관리
+                    key = (nx, ny, ''.join(sorted(new_used)))
+                    if key not in visited:
+                        visited.add(key)
+                        q.append((nx, ny, new_used, count + 1))
 
+    return max_count
 
-n = int(input().strip())
-m = int(input().strip())
-data = [tuple(map(int, input().strip().split())) for _ in range(m)]
-graph = [[] for _ in range(n+1)]
-
-for start, end, weight in data: # 양방향 그래프로 만들어 줌
-    graph[start].append((weight, end))
-    graph[end].append((weight, start))
-
-ans = Prim(n, m)
-print(ans.solve(graph))
-
-
+print(bfs())

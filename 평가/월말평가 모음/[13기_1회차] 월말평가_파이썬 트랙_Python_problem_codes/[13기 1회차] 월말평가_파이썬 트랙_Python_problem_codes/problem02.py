@@ -5,15 +5,12 @@
 def analyze_treasures(treasure_list, threshold):
     result = {}
     for i in treasure_list:
-        if i in result.keys():
+        if i in treasure_list.keys():
             continue
         else:
             result[i] = treasure_list.count(i)
-    cnt = 0
-    for j in result.values():
-        if int(j) > threshold:
-           cnt += 1
-    return result, cnt
+
+    return result
     # 여기에 코드를 작성하여 함수를 완성합니다.
 
 
@@ -26,4 +23,3 @@ print(analyze_treasures([], 3))
 print(analyze_treasures(["pearl", "pearl", "ruby"], 2))
 # ({'pearl': 2, 'ruby': 1}, 0)
 #####################################################
-
