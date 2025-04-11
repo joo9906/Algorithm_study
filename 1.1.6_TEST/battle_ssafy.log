@@ -1,0 +1,25 @@
+[20250408.232820][INFO] Application launched.
+[20250408.232820][INFO] version: 1.1.6
+[20250409.143935][INFO] Application launched.
+[20250409.143935][INFO] version: 1.1.6
+[20250409.144005][INFO] mode selected: 0
+[20250409.144239][INFO] trying to authenticate with PT00017404, XJCX-YTHM-HTRA-RPHY.
+[20250409.144239][INFO] authentication activated.
+[20250409.144239][ERROR] authentication failed.
+[20250409.151001][INFO] trying to authenticate with PT00017404, XJCX-YTHM-HTRA-RPHY.
+[20250409.151001][INFO] authentication activated.
+[20250409.151002][INFO] authentication succeed.
+[20250409.151002][INFO] entered stage main window.
+[20250409.151002][INFO] stage initialized with STAGE, NONE, STOPPED, 0, 1, 0, CLEAR.
+[20250409.151002][INFO] user authenticated for 1340627
+[20250409.151002][INFO] network socket reset.
+[20250409.151003][INFO] stage selected: 1
+[20250409.151003][INFO] socket opened
+[20250409.151019][INFO] client connected. 0, 1
+[20250409.151020][INFO] Stage ended.
+[20250409.151020][INFO] socket closed.
+[20250409.151023][INFO] socket closed.
+[20250409.151023][INFO] entered stage main window.
+[20250409.151023][INFO] stage initialized with STAGE, NONE, STOPPED, 0, 1, 0, CLEAR.
+[20250409.151023][INFO] user authenticated for 1340627
+[20250409.151023][INFO] network socket reset.
