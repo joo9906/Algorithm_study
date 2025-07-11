@@ -1,40 +1,28 @@
-import sys
-from collections import deque
-input = sys.stdin.readline
-
-def solve(h, w, array):
-    delta = [(0, 1), (1, 0), (0, -1), (-1, 0)]
-    start_point = set()
-    weight_map = [([0] * w) for _ in range(h)]
-
-    for i in range(h):
-        for j in range(w):
-            if array[i][j] == 'L':
-                start_point.add((i, j))
-
-    for pos in start_point:
-        visited = [([False] * w) for _ in range(h)]
-
-        q = deque([(0, pos[0], pos[1])])
-        visited[pos[0]][pos[1]] = True
-
-        while q:
-            weight, x, y = q.popleft()
-            weight_map[x][y] = max(weight_map[x][y], weight)
-
-            for dx, dy in delta:
-                nx, ny = x + dx, y + dy
-                if 0 <= nx < h and 0 <= ny < w and array[nx][ny] != 'W' and visited[nx][ny] == False:
-                    q.append((weight+1, nx, ny))
-                    visited[nx][ny] = True
+def solution(info, n, m):
+    answer = 10000000
+    k = len(info)
+    visited = [False] * k
+    a_cnt = 0
+    b_cnt = 0
     
-    answer = 0
-    for a in range(w):
-        for b in range(h):
-            answer = max(answer, weight_map[b][a])
+    def search(a_cnt, b_cnt, l = 0):   
+        nonlocal answer, n
+        if l==k and a_cnt < n and b_cnt < m:
+            answer = min(answer, a_cnt)
+            
+        for i in range(l, k):
+            if a_cnt + info[i][0] <= n and visited[i] == False:
+                visited[i] = True
+                search(a_cnt+info[i][0], b_cnt, l + 1)
+                search(a_cnt, b_cnt + info[i][1], l + 1)
+                visited[i] = False
+    
+    search(a_cnt, b_cnt)
+    if a_cnt == n or answer == 1000000:
+        return -1
+    else:
+        return answer
 
-    return answer
-
-H, W = map(int, input().strip().split())
-array = [list(map(str, input().strip())) for _ in range(H)]
-print(solve(H, W, array))
+info = [[1, 2], [2, 3], [2, 1]]
+n, m = 4, 4
+print(solution(info, n, m))  # Expected output: 2
