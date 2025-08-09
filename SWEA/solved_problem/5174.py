@@ -24,7 +24,8 @@ def solve(nodes, root):
 T = int(input())
 for tc in range(1, T+1):
     E, N = map(int, input().split())
-    nodes = {i:[] for i in range(1001)}
+    # 이거 1001로 했다가 1001번째 노드가 있어서 터짐.
+    nodes = {i:[] for i in range(1002)}
     input_nodes = list(map(int, input().split()))
     for k in range(0, len(input_nodes), 2):
         nodes[input_nodes[k]].append(input_nodes[k+1])
