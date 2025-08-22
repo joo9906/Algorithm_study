@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 5 3
 5 4 3 2 1
 1 3
 2 4
 5 5
+=======
+ACAYKP
+CAPCAK
+>>>>>>> 7ea19cc6a2245c36af63ef673db66c42cc34e6a4
