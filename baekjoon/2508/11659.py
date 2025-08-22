@@ -1,14 +1,15 @@
 import sys
 input = sys.stdin.readline
-sys.stdin = open("input2508.txt", "r")
-
-class Segtree:
-    def __init__(self, start, end):
-        self.start = start
-        self.end = end
+# sys.stdin = open("input2508.txt", "r")
 
 N, M = map(int, input().strip().split())
 arr = [0] + list(map(int, input().strip().split()))
+
 for _ in range(M):
-    i, j = map(int, input().strip().split())
-    print(sum(arr[i:j+1]))
+    left, right = map(int, input().strip().split())
+    cur = 0
+    while left <= right:
+        cur += arr[left]
+        left += 1
+
+    print(cur)

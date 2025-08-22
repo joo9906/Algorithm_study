@@ -1,47 +1,20 @@
-import sys
-from collections import deque
-input = sys.stdin.readline
+from collections import defaultdict
 
-#sys.stdin = open("input2508.txt", "r")
+N, target = map(int, input().split())
+A = list(map(int, input().split()))
 
-N = int(input().strip())
-q = deque()
+cnt = defaultdict(int)
+cnt[0] = 1          # P0 = 0을 미리 본 것으로
+s = 0               # 현재까지 누적합 P[j]
+ans = 0
 
-for _ in range(N):
-    input_val = input().strip().split()
-    
-    word = input_val[0]
-    
-    if word == "push_front":
-        q.appendleft(int(input_val[-1]))
-    elif word == "push_back":
-        q.append(int(input_val[-1]))
-    elif word == "front":
-        try:
-            print(q[0])
-        except:
-            print(-1)
-    elif word == "back":
-        try:
-            print(q[-1])
-        except:
-            print(-1)
-    elif word == "pop_front":
-        try:
-            print(q.popleft())
-        except:
-            print(-1)
-    elif word == "pop_back":
-        try:
-            print(q.pop())
-        except:
-            print(-1)
-    elif word == "empty":
-        if q:
-            print(0)
-        else:
-            print(1)
-    elif word == "size":
-        print(len(q))
+for idx, x in enumerate(A, start=1):  # j = 1..N
+    s += x
+    add = cnt[s - target]             # 이번에 더해질 양(과거의 후보 개수)
+    ans += add
+    # 디버그
+    print(f"j={idx}, x={x}, s={s}, s-target={s-target}, "
+          f"더할개수={add}, ans={ans}, cnt={dict(cnt)}")
+    cnt[s] += 1
 
-    
+print(ans)
