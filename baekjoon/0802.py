@@ -1,18 +1,7 @@
-import sys
-sys.stdin = open("input.txt", 'r')
+from itertools import combinations
 
-data = []
-for _ in range(3):
-    data.append(list(map(int, input().split())))
+n = [1, 2, 3]
 
-for i in data:
-    if sum(i) == 0:
-        print("D")
-    elif sum(i) == 4:
-        print("E")
-    elif sum(i) == 1:
-        print("C")
-    elif sum(i) == 2:
-        print("B")
-    else:
-        print("A")
+for i in combinations(n, 2):
+    print(i)
+print(combinations(n, 2))
