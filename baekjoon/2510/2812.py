@@ -8,3 +8,4 @@ result = []
 result.append(int(num[0]))
 
 while K > 0:
+    break
