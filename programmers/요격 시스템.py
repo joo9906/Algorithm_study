@@ -1,7 +1,6 @@
 def solution(targets):
     answer = 0
     targets.sort(key = lambda x: x[1])
-    print(targets)
     start = 0
     end = 0
 
