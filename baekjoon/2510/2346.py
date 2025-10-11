@@ -1,40 +1,28 @@
 import sys
 from collections import deque
-# input = sys.stdin.readline
-sys.stdin = open("input.txt", "r")
+input = sys.stdin.readline
+# sys.stdin = open("input.txt", "r")
 
 N = int(input())
 balloons = list(map(int, input().strip().split()))
-q = deque()
-ans = []
-
+balloon_list = deque()
 for i in range(N):
-    q.append((i+1, balloons[i]))
+    balloon_list.append((i+1, balloons[i]))
 
-stack = 0
-bal_num, move = q.popleft()
-ans.append(bal_num)
-stack = move
+result = []
+while balloon_list:
+    balloon_num, nxt = balloon_list.popleft()
 
-while q:
-    if stack > 0:
-        for _ in range(stack):
-            stack -= 1
-            if stack == 0:
-                nb, nm = q.popleft()
-                ans.append(nb)
-                stack = nm
-                break
-            q.append(q.popleft())
+    result.append(balloon_num)
 
-    elif stack < 0:
-        for _ in range(-stack):
-            stack += 1
-            if stack == 0:
-                nb, nm = q.popleft()
-                ans.append(nb)
-                stack = nm
-                break
-            q.appendleft(q.pop())
+    try:
+        if nxt < 0:
+            for _ in range(-nxt):
+                balloon_list.appendleft(balloon_list.pop())
+        else:
+            for _ in range(nxt-1):
+                balloon_list.append(balloon_list.popleft())
+    except:
+        break
 
-print(*ans)
+print(*result)
