@@ -1,29 +1,10 @@
-n = int(input())
-q = []
-what = []
+import bisect
 
-for _ in range(n):
-    data = tuple(input().split())
-    what.append(data)
-print(what)
-for i in what:
-    if len(i) == 2:
-        q.append(i[1])
-    else:
-        do = i[0]
-        if do == "front":
-            print(q[0])
-        elif do == "back":
-            print(q[-1])
-        elif do == "size":
-            print(len(q))
-        elif do == "empty":
-            if not q:
-                print(1)
-            else:
-                print(0)
-        elif do == "pop":
-            if q:
-                print(q.pop())
-            else:
-                print(-1)
+arr = [1, 2, 3, 5, 5, 8, 10]
+a, b = 3, 8
+
+left = bisect.bisect_left(arr, a)
+print(left)
+right = bisect.bisect_right(arr, b)
+print(right)
+print(right - left)

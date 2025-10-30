@@ -93,7 +93,7 @@ print(result)
 
 import heapq
 
-def dijkstar(start_node):
+def dijkstra(start_node):
     pq = [(0, start_node)]
     distance = [float('inf')] * V # 해당 노드까지 가는 최단거리 저장 리스트
     distance[start_node] = 0 # 시작 노드의 최단거리는 0
