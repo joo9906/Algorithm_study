@@ -1,2 +1,9 @@
-4 4
-3 0 1 4
+8
+sbrus.txt
+spc.spc
+acm.icpc
+korea.icpc
+sample.txt
+hello.world
+sogang.spc
+example.txt
