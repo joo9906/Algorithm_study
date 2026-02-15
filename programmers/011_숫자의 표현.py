@@ -1,27 +1,28 @@
 def solution(n):
     answer = 0
-    nums = [i for i in range(1, n + 1)]
-    start = 0
-    end = n
+    start = 1
+    end = 1
+    current_sum = 1
 
-    while start < end:
-        ans = sum(nums[start:end])
-        print(ans, start, end)
-        if ans == n:
+    while start <= n:
+        if current_sum == n:
             answer += 1
+            # 합이 n과 같으면, 다음 케이스를 찾기 위해 왼쪽을 당겨옴(오른쪽을 미는건 의미 없음)
+            current_sum -= start
             start += 1
 
-        elif ans < n:
+        elif current_sum < n:
+            # 합이 n보다 작으면 오른쪽을 확장
             end += 1
 
-        elif ans > n:
-            end -= 1
+            if end > n: break  # 범위를 벗어나면 종료
+            current_sum += end
 
-    print(answer)
+        else:
+            # 합이 n보다 크면 왼쪽을 축소
+            current_sum -= start
+            start += 1
+
     return answer
 
-solution(15)
-
-import sys
-
-sys.setrecursionlimit()
+print(solution(15))
