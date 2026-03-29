@@ -1,6 +1,6 @@
 import sys
 input = sys.stdin.readline
-sys.stdin = open("./input2508.txt", "r")
+sys.stdin = open("input2508.txt", "r")
 
 n, k = map(int, input().strip().split())
 situation = {i: [] for i in range(1, n+1)}

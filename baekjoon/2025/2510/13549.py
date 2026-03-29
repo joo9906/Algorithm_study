@@ -1,6 +1,6 @@
 import sys
 from collections import deque
-sys.input = open("input.txt","r")
+sys.input = open("input.txt", "r")
 
 N, K = map(int, input().split())
 MAX = 100000
